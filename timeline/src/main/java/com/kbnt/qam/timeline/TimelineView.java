@@ -400,7 +400,7 @@ public class TimelineView extends View {
         }
     }
 
-    public void setOnEpisodeClickListener(OnTrackClickListener onTrackClickListener) {
+    public void setOnTrackClickListener(OnTrackClickListener onTrackClickListener) {
         mEventDetector.setOnEpisodeClickListener(onTrackClickListener);
     }
 

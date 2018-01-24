@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         channels.add(new Channel(tracks3));
 
         final TimelineView timelineView = findViewById(R.id.timeline);
-        timelineView.setOnEpisodeClickListener(new TimelineView.OnTrackClickListener() {
+        timelineView.setOnTrackClickListener(new TimelineView.OnTrackClickListener() {
             @Override
             public void onTrackClick(Track track, DateTime dateTime) {
                 System.out.println(track);
