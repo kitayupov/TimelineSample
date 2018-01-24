@@ -44,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
         channels.add(new Channel(episodes3));
 
         final TimelineView timelineView = findViewById(R.id.timeline);
+        timelineView.setOnEpisodeClickListener(new TimelineView.OnEpisodeClickListener() {
+            @Override
+            public void onClick(Episode episode, DateTime dateTime) {
+                System.out.println(episode);
+                System.out.println(dateTime);
+            }
+        });
         timelineView.setChannels(channels);
     }
 }
