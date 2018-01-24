@@ -16,8 +16,8 @@ import android.view.View;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
-import com.kbnt.qam.timeline.episode.Channel;
-import com.kbnt.qam.timeline.episode.Episode;
+import com.kbnt.qam.timeline.channel.Channel;
+import com.kbnt.qam.timeline.channel.Track;
 
 import org.joda.time.DateTime;
 
@@ -72,9 +72,9 @@ public class TimelineView extends View {
         long start = System.currentTimeMillis();
         long stop = 0;
         for (Channel channel : channels) {
-            for (Episode episode : channel.getEpisodes()) {
-                start = Math.min(start, episode.start);
-                stop = Math.max(stop, episode.stop);
+            for (Track track : channel.getTracks()) {
+                start = Math.min(start, track.start);
+                stop = Math.max(stop, track.stop);
             }
         }
         interval.setStart(new DateTime(start));
@@ -152,14 +152,14 @@ public class TimelineView extends View {
 
     private void drawChannels(Canvas canvas) {
         for (int i = 0; i < channels.size(); i++) {
-            drawEpisodes(canvas, i);
+            drawTracks(canvas, i);
         }
     }
 
-    private void drawEpisodes(Canvas canvas, int index) {
-        for (Episode episode : channels.get(index).getEpisodes()) {
-            final long start = episode.start;
-            final long stop = episode.stop;
+    private void drawTracks(Canvas canvas, int index) {
+        for (Track track : channels.get(index).getTracks()) {
+            final long start = track.start;
+            final long stop = track.stop;
             final float startX = Math.max(0, getPoint(new DateTime(start)));
             final float stopX = Math.min(getTotalWidth(), getPoint(new DateTime(stop)));
 
@@ -306,10 +306,10 @@ public class TimelineView extends View {
         return null;
     }
 
-    private Episode getEpisode(Channel channel, DateTime date) {
-        for (Episode episode : channel.getEpisodes()) {
-            if (episode.contains(date)) {
-                return episode;
+    private Track getTrack(Channel channel, DateTime date) {
+        for (Track track : channel.getTracks()) {
+            if (track.contains(date)) {
+                return track;
             }
         }
         return null;
@@ -348,7 +348,7 @@ public class TimelineView extends View {
         private long startClickTime;
         private float startMove;
 
-        private OnEpisodeClickListener mOnEpisodeClickListener;
+        private OnTrackClickListener mOnTrackClickListener;
 
         void onTouchEvent(MotionEvent event) {
             final float x = event.getX();
@@ -382,30 +382,30 @@ public class TimelineView extends View {
             if (channel != null) {
                 final long datePoint = getDate(x - getPaddingStart());
                 final DateTime dateTime = interval.getStart().plus(datePoint);
-                final Episode episode = getEpisode(channel, dateTime);
-                if (episode != null) {
-                    if (mOnEpisodeClickListener != null) {
-                        mOnEpisodeClickListener.onEpisodeClick(episode, dateTime);
+                final Track track = getTrack(channel, dateTime);
+                if (track != null) {
+                    if (mOnTrackClickListener != null) {
+                        mOnTrackClickListener.onTrackClick(track, dateTime);
                     }
-                } else if (mOnEpisodeClickListener != null) {
-                    mOnEpisodeClickListener.onFailure(x, y, "no episode found in this point");
+                } else if (mOnTrackClickListener != null) {
+                    mOnTrackClickListener.onFailure(x, y, "no track found in this point");
                 }
-            } else if (mOnEpisodeClickListener != null) {
-                mOnEpisodeClickListener.onFailure(x, y, "no channel found in the point");
+            } else if (mOnTrackClickListener != null) {
+                mOnTrackClickListener.onFailure(x, y, "no channel found in the point");
             }
         }
 
-        void setOnEpisodeClickListener(OnEpisodeClickListener onEpisodeClickListener) {
-            this.mOnEpisodeClickListener = onEpisodeClickListener;
+        void setOnEpisodeClickListener(OnTrackClickListener onTrackClickListener) {
+            this.mOnTrackClickListener = onTrackClickListener;
         }
     }
 
-    public void setOnEpisodeClickListener(OnEpisodeClickListener onEpisodeClickListener) {
-        mEventDetector.setOnEpisodeClickListener(onEpisodeClickListener);
+    public void setOnEpisodeClickListener(OnTrackClickListener onTrackClickListener) {
+        mEventDetector.setOnEpisodeClickListener(onTrackClickListener);
     }
 
-    public interface OnEpisodeClickListener {
-        void onEpisodeClick(Episode episode, DateTime dateTime);
+    public interface OnTrackClickListener {
+        void onTrackClick(Track track, DateTime dateTime);
 
         void onFailure(float x, float y, String message);
     }

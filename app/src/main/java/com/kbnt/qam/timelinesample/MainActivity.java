@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.kbnt.qam.timeline.TimelineView;
-import com.kbnt.qam.timeline.episode.Channel;
-import com.kbnt.qam.timeline.episode.Episode;
+import com.kbnt.qam.timeline.channel.Channel;
+import com.kbnt.qam.timeline.channel.Track;
 
 import org.joda.time.DateTime;
 
@@ -24,30 +24,30 @@ public class MainActivity extends AppCompatActivity {
 
         final ArrayList<Channel> channels = new ArrayList<>();
 
-        final ArrayList<Episode> episodes1 = new ArrayList<>();
-        episodes1.add(new Episode(FIRST_START, DURATION));
+        final ArrayList<Track> tracks1 = new ArrayList<>();
+        tracks1.add(new Track(FIRST_START, DURATION));
         for (int i = 0; i < 50; i++) {
-            episodes1.add(new Episode(START.plusMonths(i).getMillis(), DURATION));
+            tracks1.add(new Track(START.plusMonths(i).getMillis(), DURATION));
         }
-        channels.add(new Channel(episodes1));
+        channels.add(new Channel(tracks1));
 
-        final ArrayList<Episode> episodes2 = new ArrayList<>();
+        final ArrayList<Track> tracks2 = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            episodes2.add(new Episode(START.minusYears(3).plusMonths(i).getMillis(), DURATION));
+            tracks2.add(new Track(START.minusYears(3).plusMonths(i).getMillis(), DURATION));
         }
-        channels.add(new Channel(episodes2));
+        channels.add(new Channel(tracks2));
 
-        final ArrayList<Episode> episodes3 = new ArrayList<>();
+        final ArrayList<Track> tracks3 = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            episodes3.add(new Episode(START.minusYears(6).plusMonths(i).getMillis(), DURATION));
+            tracks3.add(new Track(START.minusYears(6).plusMonths(i).getMillis(), DURATION));
         }
-        channels.add(new Channel(episodes3));
+        channels.add(new Channel(tracks3));
 
         final TimelineView timelineView = findViewById(R.id.timeline);
-        timelineView.setOnEpisodeClickListener(new TimelineView.OnEpisodeClickListener() {
+        timelineView.setOnEpisodeClickListener(new TimelineView.OnTrackClickListener() {
             @Override
-            public void onEpisodeClick(Episode episode, DateTime dateTime) {
-                System.out.println(episode);
+            public void onTrackClick(Track track, DateTime dateTime) {
+                System.out.println(track);
                 System.out.println(dateTime);
             }
 

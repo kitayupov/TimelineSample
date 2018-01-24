@@ -1,13 +1,13 @@
-package com.kbnt.qam.timeline.episode;
+package com.kbnt.qam.timeline.channel;
 
 import org.joda.time.DateTime;
 
-public class Episode {
+public class Track {
 
     public final long start;
     public final long stop;
 
-    public Episode(long start, float duration) {
+    public Track(long start, float duration) {
         this.start = start;
         this.stop = start + (long) (duration * 1000);
     }
@@ -18,7 +18,7 @@ public class Episode {
 
     @Override
     public String toString() {
-        return "Episode{" +
+        return "Track{" +
                 "start=" + new DateTime(start) +
                 ", stop=" + new DateTime(stop) +
                 '}';
