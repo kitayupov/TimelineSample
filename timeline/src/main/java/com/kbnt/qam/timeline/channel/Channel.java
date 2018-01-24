@@ -1,16 +1,16 @@
 package com.kbnt.qam.timeline.channel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Channel {
 
-    private ArrayList<Track> tracks;
+    private List<? extends Track> tracks;
 
-    public Channel(ArrayList<Track> tracks) {
+    public Channel(List<? extends Track> tracks) {
         this.tracks = tracks;
     }
 
-    public ArrayList<Track> getTracks() {
+    public List<? extends Track> getTracks() {
         return tracks;
     }
 
