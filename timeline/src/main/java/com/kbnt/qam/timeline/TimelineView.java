@@ -28,8 +28,6 @@ import java.util.List;
 public class TimelineView extends View {
 
     private static final int MAX_COUNT = 20;
-    private static final int CLICK_ACTION_THRESHOLD = 200;
-    private static final int MOVE_ACTION_THRESHOLD = 10;
 
     private static final float MIN_SCALE_FACTOR = 1.F;
     private static float MAX_SCALE_FACTOR;
@@ -47,11 +45,10 @@ public class TimelineView extends View {
 
     private long dateX = 0;
     private float scaleFactor = MIN_SCALE_FACTOR;
-    private long startClickTime;
-    private float startMove;
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
+    private EventDetector mEventDetector;
 
     public TimelineView(Context context) {
         this(context, null);
@@ -122,6 +119,7 @@ public class TimelineView extends View {
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
+        mEventDetector = new EventDetector();
     }
 
     @Override
@@ -293,51 +291,8 @@ public class TimelineView extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
         mScrollDetector.onTouchEvent(event);
-        perform(event);
+        mEventDetector.onTouchEvent(event);
         return true;
-    }
-
-    private void perform(MotionEvent event) {
-        final float x = event.getX();
-        final float y = event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startClickTime = Calendar.getInstance().getTimeInMillis();
-                startMove = x;
-                break;
-            case MotionEvent.ACTION_UP:
-                final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                if (duration < CLICK_ACTION_THRESHOLD) {
-                    System.out.println("click");
-                    click = new Point((int) x, (int) y);
-                    performClick(x, y);
-                    invalidate();
-                } else {
-                    System.out.println("not click");
-                    click = null;
-                }
-                break;
-            case MotionEvent.ACTION_MOVE:
-                final float distance = Math.abs(x - startMove);
-                if (distance > MOVE_ACTION_THRESHOLD) {
-                    startClickTime = 0;
-                }
-                break;
-        }
-    }
-
-    private void performClick(float x, float y) {
-        final Channel channel = getChannel(y - getRelativeTop());
-        if (channel != null) {
-            System.out.println(channel);
-            final long datePoint = getDate(x - getPaddingStart());
-            final DateTime date = interval.getStart().plus(datePoint);
-            System.out.println(date);
-            final Episode episode = getEpisode(channel, date);
-            if (episode != null) {
-                System.out.println(episode);
-            }
-        }
     }
 
     private Channel getChannel(float y) {
@@ -383,5 +338,69 @@ public class TimelineView extends View {
             invalidate();
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
+    }
+
+    private class EventDetector {
+
+        private static final int CLICK_ACTION_THRESHOLD = 200;
+        private static final int MOVE_ACTION_THRESHOLD = 10;
+
+        private long startClickTime;
+        private float startMove;
+
+        private OnEpisodeClickListener mOnEpisodeClickListener;
+
+        void onTouchEvent(MotionEvent event) {
+            final float x = event.getX();
+            final float y = event.getY();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startClickTime = Calendar.getInstance().getTimeInMillis();
+                    startMove = x;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                    if (duration < CLICK_ACTION_THRESHOLD) {
+                        click = new Point((int) x, (int) y);
+                        performClick(x, y);
+                        invalidate();
+                    } else {
+                        click = null;
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    final float distance = Math.abs(x - startMove);
+                    if (distance > MOVE_ACTION_THRESHOLD) {
+                        startClickTime = 0;
+                    }
+                    break;
+            }
+        }
+
+        private void performClick(float x, float y) {
+            final Channel channel = getChannel(y - getRelativeTop());
+            if (channel != null) {
+                final long datePoint = getDate(x - getPaddingStart());
+                final DateTime dateTime = interval.getStart().plus(datePoint);
+                final Episode episode = getEpisode(channel, dateTime);
+                if (episode != null) {
+                    if (mOnEpisodeClickListener != null) {
+                        mOnEpisodeClickListener.onClick(episode, dateTime);
+                    }
+                }
+            }
+        }
+
+        void setOnEpisodeClickListener(OnEpisodeClickListener onEpisodeClickListener) {
+            this.mOnEpisodeClickListener = onEpisodeClickListener;
+        }
+    }
+
+    public void setOnEpisodeClickListener(OnEpisodeClickListener onEpisodeClickListener) {
+        mEventDetector.setOnEpisodeClickListener(onEpisodeClickListener);
+    }
+
+    public interface OnEpisodeClickListener {
+        void onClick(Episode episode, DateTime dateTime);
     }
 }
