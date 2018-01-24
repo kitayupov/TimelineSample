@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -13,11 +12,11 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import com.kbnt.qam.timeline.channel.Channel;
+import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
-import com.kbnt.qam.timeline.channel.Channel;
-import com.kbnt.qam.timeline.channel.Track;
 
 import org.joda.time.DateTime;
 
@@ -38,7 +37,6 @@ public class TimelineView extends View {
     private Paint mainSerifPaint;
     private Paint mainTextPaint;
     private Paint secondaryTextPaint;
-    private Point click;
 
     private TimeInterval interval;
     private ArrayList<Channel> channels;
@@ -73,8 +71,8 @@ public class TimelineView extends View {
         long stop = 0;
         for (Channel channel : channels) {
             for (Track track : channel.getTracks()) {
-                start = Math.min(start, track.start);
-                stop = Math.max(stop, track.stop);
+                start = Math.min(start, track.getStart());
+                stop = Math.max(stop, track.getStop());
             }
         }
         interval.setStart(new DateTime(start));
@@ -134,10 +132,6 @@ public class TimelineView extends View {
         drawTimelineBar(canvas);
         drawChannels(canvas);
         canvas.restore();
-
-        if (click != null) {
-            canvas.drawCircle(click.x, click.y, 5, linePaint);
-        }
     }
 
     private int getRelativeTop() {
@@ -158,8 +152,8 @@ public class TimelineView extends View {
 
     private void drawTracks(Canvas canvas, int index) {
         for (Track track : channels.get(index).getTracks()) {
-            final long start = track.start;
-            final long stop = track.stop;
+            final long start = track.getStart();
+            final long stop = track.getStop();
             final float startX = Math.max(0, getPoint(new DateTime(start)));
             final float stopX = Math.min(getTotalWidth(), getPoint(new DateTime(stop)));
 
@@ -361,11 +355,8 @@ public class TimelineView extends View {
                 case MotionEvent.ACTION_UP:
                     final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                     if (duration < CLICK_ACTION_THRESHOLD) {
-                        click = new Point((int) x, (int) y);
                         performClick(x, y);
                         invalidate();
-                    } else {
-                        click = null;
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:

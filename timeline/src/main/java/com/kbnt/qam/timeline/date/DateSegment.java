@@ -36,4 +36,9 @@ public class DateSegment {
     long getInterval() {
         return stop.getMillis() - start.getMillis();
     }
+
+    public boolean contains(DateTime dateTime) {
+        return dateTime.getMillis() >= start.getMillis() &&
+                dateTime.getMillis() <= stop.getMillis();
+    }
 }
