@@ -13,4 +13,11 @@ public class Channel {
     public ArrayList<Episode> getEpisodes() {
         return episodes;
     }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "episodes=" + episodes +
+                '}';
+    }
 }

@@ -77,7 +77,7 @@ public class TimelineView extends View {
         for (Channel channel : channels) {
             for (Episode episode : channel.getEpisodes()) {
                 start = Math.min(start, episode.start);
-                stop = Math.max(stop, episode.start + (long) (episode.duration * 1000));
+                stop = Math.max(stop, episode.stop);
             }
         }
         interval.setStart(new DateTime(start));
@@ -131,10 +131,8 @@ public class TimelineView extends View {
         final long interval = this.interval.getInterval();
         dateX = (long) Math.max(0, Math.min(dateX, interval - interval / scaleFactor));
 
-        final int height = 100 + 50 * (channels.size() - 1);
-
         canvas.save();
-        canvas.translate(getPaddingStart(), (getHeight() - height) / 2);
+        canvas.translate(getPaddingStart(), getRelativeTop());
         drawTimelineBar(canvas);
         drawChannels(canvas);
         canvas.restore();
@@ -142,6 +140,11 @@ public class TimelineView extends View {
         if (click != null) {
             canvas.drawCircle(click.x, click.y, 5, linePaint);
         }
+    }
+
+    private int getRelativeTop() {
+        final int height = 100 + 50 * (channels.size() - 1);
+        return (getHeight() - height) / 2;
     }
 
     private void drawTimelineBar(Canvas canvas) {
@@ -158,7 +161,7 @@ public class TimelineView extends View {
     private void drawEpisodes(Canvas canvas, int index) {
         for (Episode episode : channels.get(index).getEpisodes()) {
             final long start = episode.start;
-            final long stop = start + (long) (episode.duration * 1000);
+            final long stop = episode.stop;
             final float startX = Math.max(0, getPoint(new DateTime(start)));
             final float stopX = Math.min(getTotalWidth(), getPoint(new DateTime(stop)));
 
@@ -294,16 +297,19 @@ public class TimelineView extends View {
     }
 
     private void perform(MotionEvent event) {
+        final float x = event.getX();
+        final float y = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startClickTime = Calendar.getInstance().getTimeInMillis();
-                startMove = event.getX();
+                startMove = x;
                 break;
             case MotionEvent.ACTION_UP:
                 final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
                 if (duration < CLICK_ACTION_THRESHOLD) {
                     System.out.println("click");
-                    click = new Point((int) event.getX(), (int) event.getY());
+                    click = new Point((int) x, (int) y);
+                    performClick(x, y);
                     invalidate();
                 } else {
                     System.out.println("not click");
@@ -311,12 +317,45 @@ public class TimelineView extends View {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                final float distance = Math.abs(event.getX() - startMove);
+                final float distance = Math.abs(x - startMove);
                 if (distance > MOVE_ACTION_THRESHOLD) {
                     startClickTime = 0;
                 }
                 break;
         }
+    }
+
+    private void performClick(float x, float y) {
+        final Channel channel = getChannel(y - getRelativeTop());
+        if (channel != null) {
+            System.out.println(channel);
+            final DateTime date = interval.getStart().plus(getDate(x));
+            System.out.println(date);
+            final Episode episode = getEpisode(channel, date);
+            if (episode != null) {
+                System.out.println(episode);
+            }
+        }
+    }
+
+    private Channel getChannel(float y) {
+        for (int i = 0; i < channels.size(); i++) {
+            final int top = 40 + 50 * i;
+            final int bottom = top + 30;
+            if (y + 10 >= top && y - 10 <= bottom) {
+                return channels.get(i);
+            }
+        }
+        return null;
+    }
+
+    private Episode getEpisode(Channel channel, DateTime date) {
+        for (Episode episode : channel.getEpisodes()) {
+            if (episode.contains(date)) {
+                return episode;
+            }
+        }
+        return null;
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
