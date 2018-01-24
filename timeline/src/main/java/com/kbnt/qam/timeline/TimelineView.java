@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -21,11 +22,14 @@ import com.kbnt.qam.timeline.episode.Episode;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class TimelineView extends View {
 
     private static final int MAX_COUNT = 20;
+    private static final int CLICK_ACTION_THRESHOLD = 200;
+    private static final int MOVE_ACTION_THRESHOLD = 10;
 
     private static final float MIN_SCALE_FACTOR = 1.F;
     private static float MAX_SCALE_FACTOR;
@@ -36,12 +40,15 @@ public class TimelineView extends View {
     private Paint mainSerifPaint;
     private Paint mainTextPaint;
     private Paint secondaryTextPaint;
+    private Point click;
 
     private TimeInterval interval;
     private ArrayList<Channel> channels;
 
     private long dateX = 0;
     private float scaleFactor = MIN_SCALE_FACTOR;
+    private long startClickTime;
+    private float startMove;
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
@@ -131,6 +138,10 @@ public class TimelineView extends View {
         drawTimelineBar(canvas);
         drawChannels(canvas);
         canvas.restore();
+
+        if (click != null) {
+            canvas.drawCircle(click.x, click.y, 5, linePaint);
+        }
     }
 
     private void drawTimelineBar(Canvas canvas) {
@@ -278,7 +289,34 @@ public class TimelineView extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
         mScrollDetector.onTouchEvent(event);
+        perform(event);
         return true;
+    }
+
+    private void perform(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startClickTime = Calendar.getInstance().getTimeInMillis();
+                startMove = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                if (duration < CLICK_ACTION_THRESHOLD) {
+                    System.out.println("click");
+                    click = new Point((int) event.getX(), (int) event.getY());
+                    invalidate();
+                } else {
+                    System.out.println("not click");
+                    click = null;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                final float distance = Math.abs(event.getX() - startMove);
+                if (distance > MOVE_ACTION_THRESHOLD) {
+                    startClickTime = 0;
+                }
+                break;
+        }
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
