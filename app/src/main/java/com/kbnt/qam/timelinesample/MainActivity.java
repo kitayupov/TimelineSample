@@ -13,7 +13,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final DateTime START = DateTime.now().minusYears(10).minusMonths(1);
+    private static final DateTime START = DateTime.now().minusYears(10).withDayOfYear(1).withMillisOfDay(0);
+    private static final long FIRST_START = 200000000000L;
+    private static final float DURATION = 2000000.0F;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,21 +25,21 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<Channel> channels = new ArrayList<>();
 
         final ArrayList<Episode> episodes1 = new ArrayList<>();
-        episodes1.add(new Episode(200000000000L, 2000000.0F));
+        episodes1.add(new Episode(FIRST_START, DURATION));
         for (int i = 0; i < 50; i++) {
-            episodes1.add(new Episode(START.plusMonths(i).getMillis(), 2000000.0F));
+            episodes1.add(new Episode(START.plusMonths(i).getMillis(), DURATION));
         }
         channels.add(new Channel(episodes1));
 
         final ArrayList<Episode> episodes2 = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            episodes2.add(new Episode(START.minusYears(3).plusMonths(i).getMillis(), 2000000.0F));
+            episodes2.add(new Episode(START.minusYears(3).plusMonths(i).getMillis(), DURATION));
         }
         channels.add(new Channel(episodes2));
 
         final ArrayList<Episode> episodes3 = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            episodes3.add(new Episode(START.minusYears(6).plusMonths(i).getMillis(), 2000000.0F));
+            episodes3.add(new Episode(START.minusYears(6).plusMonths(i).getMillis(), DURATION));
         }
         channels.add(new Channel(episodes3));
 
