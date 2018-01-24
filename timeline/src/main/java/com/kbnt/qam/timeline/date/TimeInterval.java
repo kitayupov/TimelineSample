@@ -13,8 +13,8 @@ import java.util.Set;
 
 public class TimeInterval {
 
-    private DateTime startDateTime;
-    private DateTime stopDateTime;
+    private DateSegment dateSegment;
+
     private int maxCount;
 
     public enum TimePeriod {
@@ -43,8 +43,7 @@ public class TimeInterval {
     }
 
     private TimeInterval() {
-        startDateTime = new DateTime(0);
-        stopDateTime = new DateTime();
+        this.dateSegment = new DateSegment();
     }
 
     public static TimeInterval getInstance() {
@@ -52,23 +51,23 @@ public class TimeInterval {
     }
 
     public DateTime getStart() {
-        return startDateTime;
+        return dateSegment.start;
     }
 
     public void setStart(DateTime startDateTime) {
-        this.startDateTime = startDateTime;
+        dateSegment.setStart(startDateTime);
     }
 
     public DateTime getStop() {
-        return stopDateTime;
+        return dateSegment.getStop();
     }
 
     public void setStop(DateTime stopDateTime) {
-        this.stopDateTime = stopDateTime;
+        dateSegment.setStop(stopDateTime);
     }
 
     public long getInterval() {
-        return stopDateTime.getMillis() - startDateTime.getMillis();
+        return dateSegment.getInterval();
     }
 
     public float getMaxFactor() {
@@ -80,15 +79,17 @@ public class TimeInterval {
     }
 
     private int getDiff(TimePeriod period) {
+        final DateTime start = dateSegment.getStart();
+        final DateTime stop = dateSegment.getStop();
         switch (period) {
             case DECADE:
                 return (int) Math.ceil((float) getDiff(TimePeriod.YEAR) / 10);
             case YEAR:
-                return stopDateTime.getYear() - startDateTime.getYear();
+                return stop.getYear() - start.getYear();
             case MONTH:
-                return Months.monthsBetween(startDateTime.withDayOfMonth(1), stopDateTime.withDayOfMonth(1)).getMonths() + 1;
+                return Months.monthsBetween(start.withDayOfMonth(1), stop.withDayOfMonth(1)).getMonths() + 1;
             case DAY:
-                return Days.daysBetween(startDateTime, stopDateTime).getDays();
+                return Days.daysBetween(start, stop).getDays();
             case HALF_DAY:
                 return getDiff(TimePeriod.DAY) * 2;
             case QUARTER_DAY:
@@ -96,7 +97,7 @@ public class TimeInterval {
             case ONE_EIGHT_DAY:
                 return getDiff(TimePeriod.DAY) * 8;
             case HOUR:
-                return Hours.hoursBetween(startDateTime, stopDateTime).getHours();
+                return Hours.hoursBetween(start, stop).getHours();
             case HALF_HOUR:
                 return getDiff(TimePeriod.HOUR) * 2;
             case QUARTER_HOUR:
@@ -104,7 +105,7 @@ public class TimeInterval {
             case FIVE_MINUTE:
                 return (int) Math.ceil((float) getDiff(TimePeriod.MINUTE) / 5);
             case MINUTE:
-                return Minutes.minutesBetween(startDateTime, stopDateTime).getMinutes();
+                return Minutes.minutesBetween(start, stop).getMinutes();
             default:
                 return -1;
         }
@@ -125,59 +126,59 @@ public class TimeInterval {
         return result.first;
     }
 
-    public static DateTime getNormalizedDate(TimePeriod timePeriod, DateTime dateTime) {
+    public static DateTime getNormalizedDate(TimePeriod timePeriod, DateTime date) {
         switch (timePeriod) {
             case DECADE:
-                return dateTime.withYear((dateTime.getYear() / 10) * 10).withDayOfYear(1).withMillisOfDay(0);
+                return date.withYear((date.getYear() / 10) * 10).withDayOfYear(1).withMillisOfDay(0);
             case YEAR:
-                return dateTime.withDayOfYear(1).withMillisOfDay(0);
+                return date.withDayOfYear(1).withMillisOfDay(0);
             case MONTH:
-                return dateTime.withDayOfMonth(1).withMillisOfDay(0);
+                return date.withDayOfMonth(1).withMillisOfDay(0);
             case DAY:
-                return dateTime.withMillisOfDay(0);
+                return date.withMillisOfDay(0);
             case HALF_DAY:
             case QUARTER_DAY:
             case ONE_EIGHT_DAY:
             case HOUR:
-                return dateTime.withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
             case HALF_HOUR:
             case QUARTER_HOUR:
             case FIVE_MINUTE:
             case MINUTE:
-                return dateTime.withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.withSecondOfMinute(0).withMillisOfSecond(0);
             default:
-                return dateTime;
+                return date;
         }
     }
 
-    public static DateTime getNext(TimePeriod timePeriod, DateTime dateTime) {
+    public static DateTime getNext(TimePeriod timePeriod, DateTime date) {
         switch (timePeriod) {
             case DECADE:
-                return dateTime.plusYears(10).withDayOfYear(1).withMillisOfDay(0);
+                return date.plusYears(10).withDayOfYear(1).withMillisOfDay(0);
             case YEAR:
-                return dateTime.plusYears(1).withDayOfYear(1).withMillisOfDay(0);
+                return date.plusYears(1).withDayOfYear(1).withMillisOfDay(0);
             case MONTH:
-                return dateTime.plusMonths(1).withDayOfMonth(1).withMillisOfDay(0);
+                return date.plusMonths(1).withDayOfMonth(1).withMillisOfDay(0);
             case DAY:
-                return dateTime.plusDays(1).withMillisOfDay(0);
+                return date.plusDays(1).withMillisOfDay(0);
             case HALF_DAY:
-                return dateTime.plusHours(12).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusHours(12).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
             case QUARTER_DAY:
-                return dateTime.plusHours(6).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusHours(6).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
             case ONE_EIGHT_DAY:
-                return dateTime.plusHours(3).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusHours(3).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
             case HOUR:
-                return dateTime.plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
             case HALF_HOUR:
-                return dateTime.plusMinutes(30).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusMinutes(30).withSecondOfMinute(0).withMillisOfSecond(0);
             case QUARTER_HOUR:
-                return dateTime.plusMinutes(15).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusMinutes(15).withSecondOfMinute(0).withMillisOfSecond(0);
             case FIVE_MINUTE:
-                return dateTime.plusMinutes(5).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusMinutes(5).withSecondOfMinute(0).withMillisOfSecond(0);
             case MINUTE:
-                return dateTime.plusMinutes(1).withSecondOfMinute(0).withMillisOfSecond(0);
+                return date.plusMinutes(1).withSecondOfMinute(0).withMillisOfSecond(0);
             default:
-                return dateTime;
+                return date;
         }
     }
 }
