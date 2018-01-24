@@ -385,9 +385,13 @@ public class TimelineView extends View {
                 final Episode episode = getEpisode(channel, dateTime);
                 if (episode != null) {
                     if (mOnEpisodeClickListener != null) {
-                        mOnEpisodeClickListener.onClick(episode, dateTime);
+                        mOnEpisodeClickListener.onEpisodeClick(episode, dateTime);
                     }
+                } else if (mOnEpisodeClickListener != null) {
+                    mOnEpisodeClickListener.onFailure(x, y, "no episode found in this point");
                 }
+            } else if (mOnEpisodeClickListener != null) {
+                mOnEpisodeClickListener.onFailure(x, y, "no channel found in the point");
             }
         }
 
@@ -401,6 +405,8 @@ public class TimelineView extends View {
     }
 
     public interface OnEpisodeClickListener {
-        void onClick(Episode episode, DateTime dateTime);
+        void onEpisodeClick(Episode episode, DateTime dateTime);
+
+        void onFailure(float x, float y, String message);
     }
 }
