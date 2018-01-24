@@ -75,8 +75,7 @@ public class TimelineView extends View {
                 stop = Math.max(stop, track.getStop());
             }
         }
-        interval.setStart(new DateTime(start));
-        interval.setStop(new DateTime(stop));
+        interval.setInterval(start, stop);
         MAX_SCALE_FACTOR = interval.getMaxFactor();
         invalidate();
     }

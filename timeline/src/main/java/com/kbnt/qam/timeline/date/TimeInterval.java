@@ -54,16 +54,13 @@ public class TimeInterval {
         return dateSegment.start;
     }
 
-    public void setStart(DateTime startDateTime) {
-        dateSegment.setStart(startDateTime);
-    }
-
     public DateTime getStop() {
-        return dateSegment.getStop();
+        return dateSegment.stop;
     }
 
-    public void setStop(DateTime stopDateTime) {
-        dateSegment.setStop(stopDateTime);
+    public void setInterval(long start, long stop) {
+        dateSegment.setStart(start);
+        dateSegment.setStop(stop);
     }
 
     public long getInterval() {
@@ -79,8 +76,8 @@ public class TimeInterval {
     }
 
     private int getDiff(TimePeriod period) {
-        final DateTime start = dateSegment.getStart();
-        final DateTime stop = dateSegment.getStop();
+        final DateTime start = dateSegment.start;
+        final DateTime stop = dateSegment.stop;
         switch (period) {
             case DECADE:
                 return (int) Math.ceil((float) getDiff(TimePeriod.YEAR) / 10);

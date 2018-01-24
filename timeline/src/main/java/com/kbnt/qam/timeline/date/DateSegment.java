@@ -17,20 +17,12 @@ public class DateSegment {
         this.stop = stop;
     }
 
-    DateTime getStart() {
-        return start;
+    void setStart(long start) {
+        this.start = new DateTime(start);
     }
 
-    void setStart(DateTime start) {
-        this.start = start;
-    }
-
-    DateTime getStop() {
-        return stop;
-    }
-
-    void setStop(DateTime stop) {
-        this.stop = stop;
+    void setStop(long stop) {
+        this.stop = new DateTime(stop);
     }
 
     long getInterval() {
