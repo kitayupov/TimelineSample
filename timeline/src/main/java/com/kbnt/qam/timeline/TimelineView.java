@@ -176,8 +176,9 @@ public class TimelineView extends View {
     private void drawSegments(Canvas canvas) {
         final TimeInterval.TimePeriod secondaryPeriod = interval.getCountPeriod(scaleFactor);
         final TimeInterval.TimePeriod mainPeriod = secondaryPeriod.previous();
-        final long start = interval.getStart().getMillis();
-        final List<DateSegment> segments = getSegments(new DateSegment(getDate(0) + start, getDate(getTotalWidth()) + start), mainPeriod);
+        final DateTime start = interval.getStart().plus(getDate(0));
+        final DateTime stop = interval.getStart().plus(getDate(getTotalWidth()));
+        final List<DateSegment> segments = getSegments(new DateSegment(start, stop), mainPeriod);
         for (DateSegment segment : segments) {
             // Draws main serif line
             drawMainSerifLine(canvas, segment);
@@ -329,7 +330,8 @@ public class TimelineView extends View {
         final Channel channel = getChannel(y - getRelativeTop());
         if (channel != null) {
             System.out.println(channel);
-            final DateTime date = interval.getStart().plus(getDate(x));
+            final long datePoint = getDate(x - getPaddingStart());
+            final DateTime date = interval.getStart().plus(datePoint);
             System.out.println(date);
             final Episode episode = getEpisode(channel, date);
             if (episode != null) {
