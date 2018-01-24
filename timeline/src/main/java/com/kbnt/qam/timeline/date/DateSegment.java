@@ -11,9 +11,4 @@ public class DateSegment {
         this.start = start;
         this.stop = stop;
     }
-
-    public DateSegment(long start, long stop) {
-        this.start = new DateTime(start);
-        this.stop = new DateTime(stop);
-    }
 }
