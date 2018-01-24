@@ -33,4 +33,22 @@ public class DateSegment {
         return dateTime.getMillis() >= start.getMillis() &&
                 dateTime.getMillis() <= stop.getMillis();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DateSegment that = (DateSegment) o;
+
+        if (start != null ? !start.equals(that.start) : that.start != null) return false;
+        return stop != null ? stop.equals(that.stop) : that.stop == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = start != null ? start.hashCode() : 0;
+        result = 31 * result + (stop != null ? stop.hashCode() : 0);
+        return result;
+    }
 }

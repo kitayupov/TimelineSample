@@ -44,6 +44,9 @@ public class TimelineView extends View {
     private long dateX = 0;
     private float scaleFactor = MIN_SCALE_FACTOR;
 
+    private DateTime clickedDate;
+    private Track clickedTrack;
+
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
     private EventDetector mEventDetector;
@@ -160,6 +163,11 @@ public class TimelineView extends View {
                 final int top = 40 + 50 * index;
                 final int bottom = top + 30;
                 canvas.drawRect(startX, top, stopX, bottom, edgeSerifPaint);
+
+                if (track.equals(clickedTrack) && clickedDate != null) {
+                    final float point = getPoint(clickedDate);
+                    canvas.drawLine(point, top, point, bottom, linePaint);
+                }
             }
         }
     }
@@ -371,18 +379,21 @@ public class TimelineView extends View {
             final Channel channel = getChannel(y - getRelativeTop());
             if (channel != null) {
                 final long datePoint = getDate(x - getPaddingStart());
-                final DateTime dateTime = interval.getStart().plus(datePoint);
-                final Track track = getTrack(channel, dateTime);
-                if (track != null) {
+                clickedDate = interval.getStart().plus(datePoint);
+                clickedTrack = getTrack(channel, clickedDate);
+                if (clickedTrack != null) {
                     if (mOnTrackClickListener != null) {
-                        mOnTrackClickListener.onTrackClick(track, dateTime);
+                        mOnTrackClickListener.onTrackClick(clickedTrack, clickedDate);
+                        return;
                     }
                 } else if (mOnTrackClickListener != null) {
-                    mOnTrackClickListener.onFailure(x, y, "no track found in this point");
+                    mOnTrackClickListener.onFailure(x, y, "no clickedTrack found in this point");
                 }
             } else if (mOnTrackClickListener != null) {
                 mOnTrackClickListener.onFailure(x, y, "no channel found in the point");
             }
+            clickedDate = null;
+            clickedTrack = null;
         }
 
         void setOnEpisodeClickListener(OnTrackClickListener onTrackClickListener) {
