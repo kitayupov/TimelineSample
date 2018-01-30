@@ -126,7 +126,7 @@ public class TimelineView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int measuredHeight = 50 + 50 * channels.size() + getPaddingTop() + getPaddingBottom();
+        final int measuredHeight = 40 + 50 * channels.size() + getPaddingTop() + getPaddingBottom();
         setMeasuredDimension(measuredWidth, measuredHeight);
     }
 
@@ -138,10 +138,15 @@ public class TimelineView extends View {
         dateX = (long) Math.max(0, Math.min(dateX, interval - interval / scaleFactor));
 
         canvas.save();
-        canvas.translate(getPaddingStart(), getHeight() / 2);
+        canvas.translate(getPaddingStart(), getRelativeTop());
         drawTimelineBar(canvas);
         drawChannels(canvas);
         canvas.restore();
+    }
+
+    private int getRelativeTop() {
+        final int height = 40 + 50 * (channels.size() - 1);
+        return (getHeight() - height) / 2;
     }
 
     private void drawTimelineBar(Canvas canvas) {
@@ -379,7 +384,7 @@ public class TimelineView extends View {
         }
 
         private void performClick(float x, float y) {
-            final Channel channel = getChannel(y - getHeight() / 2);
+            final Channel channel = getChannel(y - getRelativeTop());
             if (channel != null) {
                 final long datePoint = getDate(x - getPaddingStart());
                 clickedDate = interval.getStart().plus(datePoint);
