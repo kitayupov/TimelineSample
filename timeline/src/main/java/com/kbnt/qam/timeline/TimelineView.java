@@ -80,6 +80,7 @@ public class TimelineView extends View {
         }
         interval.setInterval(start, stop);
         MAX_SCALE_FACTOR = interval.getMaxFactor();
+        setMeasuredDimension(getWidth(), calculateHeight());
         invalidate();
     }
 
@@ -126,8 +127,12 @@ public class TimelineView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int measuredHeight = 40 + 50 * channels.size() + getPaddingTop() + getPaddingBottom();
+        final int measuredHeight = calculateHeight();
         setMeasuredDimension(measuredWidth, measuredHeight);
+    }
+
+    private int calculateHeight() {
+        return 40 + 50 * channels.size() + getPaddingTop() + getPaddingBottom();
     }
 
     @Override
