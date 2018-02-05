@@ -17,7 +17,7 @@ import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
 import com.kbnt.qam.timeline.parameters.DrawChannels;
-import com.kbnt.qam.timeline.parameters.PaintParameters;
+import com.kbnt.qam.timeline.parameters.PaintLines;
 
 import org.joda.time.DateTime;
 
@@ -33,7 +33,7 @@ public class TimelineView extends View {
     private static float MAX_SCALE_FACTOR;
 
     private TimeInterval interval;
-    private PaintParameters paints;
+    private PaintLines paints;
     private DrawChannels channels;
 
     private long dateX = 0;
@@ -81,7 +81,7 @@ public class TimelineView extends View {
 
     private void init() {
 
-        paints = new PaintParameters();
+        paints = new PaintLines();
 
         interval = TimeInterval.getInstance();
         interval.setMaxCount(MAX_COUNT);
@@ -165,9 +165,9 @@ public class TimelineView extends View {
         final DateTime stop = interval.getStart().plus(getDate(getTotalWidth()));
         final List<DateSegment> segments = getSegments(new DateSegment(start, stop), mainPeriod);
         for (DateSegment segment : segments) {
-            // Draws main serif line
+            // Draws line serif line
             drawMainSerifLine(canvas, segment);
-            // Draws main serif text
+            // Draws line serif text
             drawMainSerifText(canvas, secondaryPeriod, segment);
             // Draws secondary serifs
             drawSecondarySerifs(canvas, secondaryPeriod, segment);

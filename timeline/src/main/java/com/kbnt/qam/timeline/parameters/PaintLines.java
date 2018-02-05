@@ -3,7 +3,7 @@ package com.kbnt.qam.timeline.parameters;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class PaintParameters {
+public class PaintLines {
 
     public final Paint line;
     public final Paint edgeSerif;
@@ -12,7 +12,7 @@ public class PaintParameters {
     public final Paint mainText;
     public final Paint secondaryText;
 
-    public PaintParameters() {
+    public PaintLines() {
         line = new Paint();
         line.setColor(Color.RED);
         line.setStrokeWidth(4.0F);
