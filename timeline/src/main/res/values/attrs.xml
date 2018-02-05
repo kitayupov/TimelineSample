@@ -11,5 +11,8 @@
         <attr name="secondarySerifStroke" format="float" />
         <attr name="mainTextColor" format="color" />
         <attr name="mainTextSize" format="float" />
+        <attr name="edgeHeight" format="integer" />
+        <attr name="primarySerifHeight" format="integer" />
+        <attr name="secondarySerifHeight" format="integer" />
     </declare-styleable>
 </resources>

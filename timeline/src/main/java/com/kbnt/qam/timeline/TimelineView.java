@@ -164,12 +164,12 @@ public class TimelineView extends View {
         final DateTime start = interval.getStart();
         final float left = getPoint(start);
         if (left >= 0) {
-            drawSerif(canvas, start, 20, 20, paints.edgeSerif);
+            drawSerif(canvas, start, paints.edgeHeight, paints.edgeHeight, paints.edgeSerif);
         }
         final DateTime stop = interval.getStop();
         final float right = getPoint(stop);
         if (right <= getTotalWidth()) {
-            drawSerif(canvas, stop, 20, 20, paints.edgeSerif);
+            drawSerif(canvas, stop, paints.edgeHeight, paints.edgeHeight, paints.edgeSerif);
         }
     }
 
@@ -177,7 +177,7 @@ public class TimelineView extends View {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
-            drawSerif(canvas, start, 20, 0, paints.primarySerif);
+            drawSerif(canvas, start, paints.primarySerifHeight, 0, paints.primarySerif);
         }
     }
 
@@ -208,7 +208,7 @@ public class TimelineView extends View {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
-            drawSerif(canvas, start, 0, 15, paints.secondarySerif);
+            drawSerif(canvas, start, 0, paints.secondarySerifHeight, paints.secondarySerif);
         }
     }
 

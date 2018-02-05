@@ -13,15 +13,20 @@ public class PaintsHelper {
     public final Paint primaryText;
     public final Paint secondaryText;
 
+    public final int edgeHeight;
+    public final int primarySerifHeight;
+    public final int secondarySerifHeight;
+
     public PaintsHelper(Context context, AttributeSet attrs) {
-
         final AttributesHolder attributes = new AttributesHolder(context, attrs);
-
         baseline = attributes.getBaselinePaint();
         edgeSerif = attributes.getEdgeSerifPaint();
         primarySerif = attributes.getPrimarySerifPaint();
         secondarySerif = attributes.getSecondarySerifPaint();
         primaryText = attributes.getPrimaryTextPaint();
         secondaryText = attributes.getSecondaryTextPaint();
+        edgeHeight = attributes.getEdgeHeight();
+        primarySerifHeight = attributes.getPrimarySerifHeight();
+        secondarySerifHeight = attributes.getSecondarySerifHeight();
     }
 }
