@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TimelineView">
+        <attr name="baselineColor" format="color" />
+        <attr name="baselineStroke" format="float" />
+        <attr name="edgeSerifColor" format="color" />
+        <attr name="edgeSerifStroke" format="float" />
+        <attr name="mainSerifColor" format="color" />
+        <attr name="mainSerifStroke" format="float" />
+        <attr name="secondarySerifColor" format="color" />
+        <attr name="secondarySerifStroke" format="float" />
+        <attr name="mainTextColor" format="color" />
+        <attr name="mainTextSize" format="float" />
+    </declare-styleable>
+</resources>

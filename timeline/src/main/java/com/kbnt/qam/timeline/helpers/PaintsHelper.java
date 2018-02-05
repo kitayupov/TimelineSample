@@ -1,42 +1,27 @@
 package com.kbnt.qam.timeline.helpers;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 
 public class PaintsHelper {
 
-    public final Paint line;
+    public final Paint baseline;
     public final Paint edgeSerif;
+    public final Paint primarySerif;
     public final Paint secondarySerif;
-    public final Paint mainSerif;
-    public final Paint mainText;
+    public final Paint primaryText;
     public final Paint secondaryText;
 
-    public PaintsHelper() {
-        line = new Paint();
-        line.setColor(Color.RED);
-        line.setStrokeWidth(4.0F);
+    public PaintsHelper(Context context, AttributeSet attrs) {
 
-        edgeSerif = new Paint();
-        edgeSerif.setColor(Color.YELLOW);
-        edgeSerif.setStrokeWidth(4.0F);
+        final AttributesHolder attributes = new AttributesHolder(context, attrs);
 
-        mainSerif = new Paint();
-        mainSerif.setColor(Color.GREEN);
-        mainSerif.setStrokeWidth(4.0F);
-
-        secondarySerif = new Paint();
-        secondarySerif.setColor(Color.LTGRAY);
-        secondarySerif.setStrokeWidth(4.0F);
-
-        mainText = new Paint();
-        mainText.setColor(Color.GREEN);
-        mainText.setTextAlign(Paint.Align.CENTER);
-        mainText.setTextSize(18);
-
-        secondaryText = new Paint();
-        secondaryText.setColor(Color.LTGRAY);
-        secondaryText.setTextAlign(Paint.Align.LEFT);
-        secondaryText.setTextSize(18);
+        baseline = attributes.getBaselinePaint();
+        edgeSerif = attributes.getEdgeSerifPaint();
+        primarySerif = attributes.getPrimarySerifPaint();
+        secondarySerif = attributes.getSecondarySerifPaint();
+        primaryText = attributes.getPrimaryTextPaint();
+        secondaryText = attributes.getSecondaryTextPaint();
     }
 }

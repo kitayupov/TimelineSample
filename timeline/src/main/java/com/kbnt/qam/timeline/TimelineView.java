@@ -47,11 +47,11 @@ public class TimelineView extends View {
 
     public TimelineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        initialize(context, attrs);
     }
 
-    private void init() {
-        paints = new PaintsHelper();
+    private void initialize(Context context, AttributeSet attrs) {
+        paints = new PaintsHelper(context, attrs);
         channels = new ChannelsHelper();
         interval = new IntervalHelper(this);
         detectors = new Detectors(this, interval, channels);
@@ -101,7 +101,7 @@ public class TimelineView extends View {
     }
 
     private void drawTimelineBar(Canvas canvas) {
-        canvas.drawLine(0, 0, getTotalWidth(), 0, paints.line);
+        canvas.drawLine(0, 0, getTotalWidth(), 0, paints.baseline);
         drawSegments(canvas);
     }
 
@@ -128,7 +128,7 @@ public class TimelineView extends View {
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
                     if (point >= 0 && point <= getTotalWidth()) {
-                        canvas.drawLine(point, top, point, bottom, paints.line);
+                        canvas.drawLine(point, top, point, bottom, paints.baseline);
                     }
                 }
             }
@@ -177,7 +177,7 @@ public class TimelineView extends View {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
-            drawSerif(canvas, start, 20, 0, paints.mainSerif);
+            drawSerif(canvas, start, 20, 0, paints.primarySerif);
         }
     }
 
@@ -188,9 +188,9 @@ public class TimelineView extends View {
         final float left = Math.max(0, getPoint(start));
         final float right = Math.min(getPoint(stop), getTotalWidth());
         final float middle = (left + right) / 2;
-        if (middle >= (paints.mainText.measureText(text) + 10) / 2 &&
-                middle <= getTotalWidth() - (paints.mainText.measureText(text) + 10) / 2) {
-            canvas.drawText(text, middle, -10, paints.mainText);
+        if (middle >= (paints.primaryText.measureText(text) + 10) / 2 &&
+                middle <= getTotalWidth() - (paints.primaryText.measureText(text) + 10) / 2) {
+            canvas.drawText(text, middle, -10, paints.primaryText);
         }
     }
 
