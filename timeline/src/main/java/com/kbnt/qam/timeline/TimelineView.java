@@ -32,8 +32,6 @@ public class TimelineView extends View {
     private ChannelsHelper channels;
     private IntervalHelper interval;
 
-    private long dateX = 0;
-
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
     private EventDetector mEventDetector;
@@ -55,6 +53,16 @@ public class TimelineView extends View {
         init();
     }
 
+    private void init() {
+        paints = new PaintsHelper();
+        channels = new ChannelsHelper();
+        interval = new IntervalHelper(this);
+
+        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
+        mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
+        mEventDetector = new EventDetector(this, interval, channels);
+    }
+
     public void setChannels(ArrayList<Channel> channels) {
         this.channels.setChannels(channels);
         long start = System.currentTimeMillis();
@@ -68,16 +76,6 @@ public class TimelineView extends View {
         interval.setInterval(start, stop);
         setMeasuredDimension(getWidth(), calculateHeight());
         invalidate();
-    }
-
-    private void init() {
-        paints = new PaintsHelper();
-        channels = new ChannelsHelper();
-        interval = new IntervalHelper();
-
-        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
-        mEventDetector = new EventDetector(this, interval, channels);
     }
 
     @Override
@@ -95,10 +93,6 @@ public class TimelineView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        final long duration = interval.getDuration();
-        final float scaleFactor = interval.getScaleFactor();
-        dateX = (long) Math.max(0, Math.min(dateX, duration - duration / scaleFactor));
 
         canvas.save();
         canvas.translate(getPaddingStart(), getRelativeTop());
@@ -251,6 +245,7 @@ public class TimelineView extends View {
     }
 
     private float getPoint(DateTime dateTime) {
+        final long dateX = interval.getDateX();
         final long date = dateTime.minus(dateX).getMillis();
         final long start = interval.getStart().getMillis();
         final long duration = interval.getDuration();
@@ -262,6 +257,7 @@ public class TimelineView extends View {
         final int width = getTotalWidth();
         final long duration = interval.getDuration();
         final float scaleFactor = interval.getScaleFactor();
+        final long dateX = interval.getDateX();
         return (long) ((pointX / width) * (duration / scaleFactor)) + dateX;
     }
 
@@ -276,13 +272,7 @@ public class TimelineView extends View {
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            final float scale = detector.getScaleFactor();
-            if (interval.enlargeScaleFactor(scale)) {
-                final long date = getDate(detector.getFocusX());
-                float diff = date - dateX;
-                diff = diff / scale - diff;
-                dateX -= diff;
-            }
+            interval.scale(detector);
             invalidate();
             return true;
         }
@@ -291,7 +281,7 @@ public class TimelineView extends View {
     private class ScrollListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            dateX = getDate(distanceX);
+            interval.scroll(distanceX);
             invalidate();
             return super.onScroll(e1, e2, distanceX, distanceY);
         }

@@ -1,5 +1,8 @@
 package com.kbnt.qam.timeline.helpers;
 
+import android.view.ScaleGestureDetector;
+
+import com.kbnt.qam.timeline.TimelineView;
 import com.kbnt.qam.timeline.date.TimeInterval;
 
 import org.joda.time.DateTime;
@@ -11,10 +14,13 @@ public class IntervalHelper {
     private static float MAX_SCALE_FACTOR;
 
     private float scaleFactor = MIN_SCALE_FACTOR;
+    private long dateX = 0;
 
     private TimeInterval interval;
+    private TimelineView view;
 
-    public IntervalHelper() {
+    public IntervalHelper(TimelineView view) {
+        this.view = view;
         interval = TimeInterval.getInstance();
         interval.setMaxCount(MAX_COUNT);
         MAX_SCALE_FACTOR = interval.getMaxFactor();
@@ -45,8 +51,28 @@ public class IntervalHelper {
         return interval.getCountPeriod(scaleFactor);
     }
 
-    public boolean enlargeScaleFactor(float scale) {
+    public long getDateX() {
+        return dateX;
+    }
+
+    public void scale(ScaleGestureDetector detector) {
+        final float scale = detector.getScaleFactor();
         scaleFactor = Math.max(MIN_SCALE_FACTOR, Math.min(scaleFactor * scale, MAX_SCALE_FACTOR));
-        return scaleFactor > MIN_SCALE_FACTOR && scaleFactor < MAX_SCALE_FACTOR;
+        if (scaleFactor > MIN_SCALE_FACTOR && scaleFactor < MAX_SCALE_FACTOR) {
+            final long date = view.getDate(detector.getFocusX());
+            float diff = date - dateX;
+            diff = diff / scale - diff;
+            dateX -= diff;
+        }
+        normalizeDate();
+    }
+
+    public void scroll(float distanceX) {
+        dateX = view.getDate(distanceX);
+        normalizeDate();
+    }
+
+    private void normalizeDate() {
+        dateX = (long) Math.max(0, Math.min(dateX, getDuration() - getDuration() / scaleFactor));
     }
 }
