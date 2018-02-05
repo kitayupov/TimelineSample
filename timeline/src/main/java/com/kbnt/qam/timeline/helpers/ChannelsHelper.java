@@ -1,10 +1,10 @@
-package com.kbnt.qam.timeline.parameters;
+package com.kbnt.qam.timeline.helpers;
 
 import com.kbnt.qam.timeline.channel.Channel;
 
 import java.util.ArrayList;
 
-public class DrawChannels {
+public class ChannelsHelper {
 
     private static final int TRACKS_MARGIN_TOP = 40;
     private static final int TRACK_HEIGHT = 30;
@@ -12,7 +12,7 @@ public class DrawChannels {
 
     private ArrayList<Channel> channels;
 
-    public DrawChannels() {
+    public ChannelsHelper() {
         channels = new ArrayList<>();
     }
 

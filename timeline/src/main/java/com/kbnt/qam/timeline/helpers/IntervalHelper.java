@@ -1,4 +1,4 @@
-package com.kbnt.qam.timeline.parameters;
+package com.kbnt.qam.timeline.helpers;
 
 import com.kbnt.qam.timeline.date.TimeInterval;
 

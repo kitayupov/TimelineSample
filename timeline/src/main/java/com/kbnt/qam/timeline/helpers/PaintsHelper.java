@@ -1,9 +1,9 @@
-package com.kbnt.qam.timeline.parameters;
+package com.kbnt.qam.timeline.helpers;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class PaintLines {
+public class PaintsHelper {
 
     public final Paint line;
     public final Paint edgeSerif;
@@ -12,7 +12,7 @@ public class PaintLines {
     public final Paint mainText;
     public final Paint secondaryText;
 
-    public PaintLines() {
+    public PaintsHelper() {
         line = new Paint();
         line.setColor(Color.RED);
         line.setStrokeWidth(4.0F);

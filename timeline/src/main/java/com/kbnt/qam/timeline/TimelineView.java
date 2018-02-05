@@ -17,9 +17,9 @@ import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
 import com.kbnt.qam.timeline.detectors.EventDetector;
-import com.kbnt.qam.timeline.parameters.DrawChannels;
-import com.kbnt.qam.timeline.parameters.IntervalHelper;
-import com.kbnt.qam.timeline.parameters.PaintLines;
+import com.kbnt.qam.timeline.helpers.ChannelsHelper;
+import com.kbnt.qam.timeline.helpers.IntervalHelper;
+import com.kbnt.qam.timeline.helpers.PaintsHelper;
 
 import org.joda.time.DateTime;
 
@@ -28,9 +28,8 @@ import java.util.List;
 
 public class TimelineView extends View {
 
-    private PaintLines paints;
-    private DrawChannels channels;
-
+    private PaintsHelper paints;
+    private ChannelsHelper channels;
     private IntervalHelper interval;
 
     private long dateX = 0;
@@ -72,8 +71,8 @@ public class TimelineView extends View {
     }
 
     private void init() {
-        paints = new PaintLines();
-        channels = new DrawChannels();
+        paints = new PaintsHelper();
+        channels = new ChannelsHelper();
         interval = new IntervalHelper();
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
