@@ -16,6 +16,7 @@ import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
+import com.kbnt.qam.timeline.parameters.DrawChannels;
 import com.kbnt.qam.timeline.parameters.PaintParameters;
 
 import org.joda.time.DateTime;
@@ -31,13 +32,9 @@ public class TimelineView extends View {
     private static final float MIN_SCALE_FACTOR = 1.F;
     private static float MAX_SCALE_FACTOR;
 
-    private static final int TRACKS_MARGIN_TOP = 40;
-    private static final int TRACK_HEIGHT = 30;
-    private static final int TRACK_MARGIN = 20;
-
-    private PaintParameters paints;
     private TimeInterval interval;
-    private ArrayList<Channel> channels;
+    private PaintParameters paints;
+    private DrawChannels channels;
 
     private long dateX = 0;
     private float scaleFactor = MIN_SCALE_FACTOR;
@@ -67,7 +64,7 @@ public class TimelineView extends View {
     }
 
     public void setChannels(ArrayList<Channel> channels) {
-        this.channels = channels;
+        this.channels.setChannels(channels);
         long start = System.currentTimeMillis();
         long stop = 0;
         for (Channel channel : channels) {
@@ -90,7 +87,7 @@ public class TimelineView extends View {
         interval.setMaxCount(MAX_COUNT);
 
         MAX_SCALE_FACTOR = interval.getMaxFactor();
-        channels = new ArrayList<>();
+        channels = new DrawChannels();
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
@@ -106,7 +103,7 @@ public class TimelineView extends View {
     }
 
     private int calculateHeight() {
-        return TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * channels.size() + getPaddingTop() + getPaddingBottom();
+        return 50 + channels.getHeight() + getPaddingTop() + getPaddingBottom();
     }
 
     @Override
@@ -124,7 +121,7 @@ public class TimelineView extends View {
     }
 
     private int getRelativeTop() {
-        final int height = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * (channels.size() - 1);
+        final int height = channels.getHeight();
         return (getHeight() - height) / 2;
     }
 
@@ -147,8 +144,8 @@ public class TimelineView extends View {
             final float stopX = Math.min(getTotalWidth(), getPoint(new DateTime(stop)));
 
             if (startX < stopX) {
-                final int top = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * index;
-                final int bottom = top + TRACK_HEIGHT;
+                final int top = channels.getChannelTop(index);
+                final int bottom = channels.getChannelBottom(index);
                 canvas.drawRect(startX, top, stopX, bottom, paints.edgeSerif);
 
                 if (track.equals(clickedTrack) && clickedDate != null) {
@@ -286,11 +283,11 @@ public class TimelineView extends View {
     }
 
     private Channel getChannel(float y) {
-        for (int i = 0; i < channels.size(); i++) {
-            final int top = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * i;
-            final int bottom = top + TRACK_HEIGHT;
+        for (int index = 0; index < channels.size(); index++) {
+            final int top = channels.getChannelTop(index);
+            final int bottom = channels.getChannelBottom(index);
             if (y + 10 >= top && y - 10 <= bottom) {
-                return channels.get(i);
+                return channels.get(index);
             }
         }
         return null;
