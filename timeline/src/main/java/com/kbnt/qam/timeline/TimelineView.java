@@ -2,7 +2,6 @@ package com.kbnt.qam.timeline;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +16,7 @@ import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
+import com.kbnt.qam.timeline.parameters.PaintParameters;
 
 import org.joda.time.DateTime;
 
@@ -31,17 +31,11 @@ public class TimelineView extends View {
     private static final float MIN_SCALE_FACTOR = 1.F;
     private static float MAX_SCALE_FACTOR;
 
-    private Paint linePaint;
-    private Paint edgeSerifPaint;
-    private Paint secondarySerifPaint;
-    private Paint mainSerifPaint;
-    private Paint mainTextPaint;
-    private Paint secondaryTextPaint;
-
     private static final int TRACKS_MARGIN_TOP = 40;
     private static final int TRACK_HEIGHT = 30;
     private static final int TRACK_MARGIN = 20;
 
+    private PaintParameters paints;
     private TimeInterval interval;
     private ArrayList<Channel> channels;
 
@@ -90,31 +84,7 @@ public class TimelineView extends View {
 
     private void init() {
 
-        linePaint = new Paint();
-        linePaint.setColor(Color.RED);
-        linePaint.setStrokeWidth(4.0F);
-
-        edgeSerifPaint = new Paint();
-        edgeSerifPaint.setColor(Color.YELLOW);
-        edgeSerifPaint.setStrokeWidth(4.0F);
-
-        mainSerifPaint = new Paint();
-        mainSerifPaint.setColor(Color.GREEN);
-        mainSerifPaint.setStrokeWidth(4.0F);
-
-        secondarySerifPaint = new Paint();
-        secondarySerifPaint.setColor(Color.LTGRAY);
-        secondarySerifPaint.setStrokeWidth(4.0F);
-
-        mainTextPaint = new Paint();
-        mainTextPaint.setColor(Color.GREEN);
-        mainTextPaint.setTextAlign(Paint.Align.CENTER);
-        mainTextPaint.setTextSize(18);
-
-        secondaryTextPaint = new Paint();
-        secondaryTextPaint.setColor(Color.LTGRAY);
-        secondaryTextPaint.setTextAlign(Paint.Align.LEFT);
-        secondaryTextPaint.setTextSize(18);
+        paints = new PaintParameters();
 
         interval = TimeInterval.getInstance();
         interval.setMaxCount(MAX_COUNT);
@@ -159,7 +129,7 @@ public class TimelineView extends View {
     }
 
     private void drawTimelineBar(Canvas canvas) {
-        canvas.drawLine(0, 0, getTotalWidth(), 0, linePaint);
+        canvas.drawLine(0, 0, getTotalWidth(), 0, paints.line);
         drawSegments(canvas);
     }
 
@@ -179,12 +149,12 @@ public class TimelineView extends View {
             if (startX < stopX) {
                 final int top = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * index;
                 final int bottom = top + TRACK_HEIGHT;
-                canvas.drawRect(startX, top, stopX, bottom, edgeSerifPaint);
+                canvas.drawRect(startX, top, stopX, bottom, paints.edgeSerif);
 
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
                     if (point >= 0 && point <= getTotalWidth()) {
-                        canvas.drawLine(point, top, point, bottom, linePaint);
+                        canvas.drawLine(point, top, point, bottom, paints.line);
                     }
                 }
             }
@@ -223,12 +193,12 @@ public class TimelineView extends View {
         final DateTime start = interval.getStart();
         final float left = getPoint(start);
         if (left >= 0) {
-            drawSerif(canvas, start, 20, 20, edgeSerifPaint);
+            drawSerif(canvas, start, 20, 20, paints.edgeSerif);
         }
         final DateTime stop = interval.getStop();
         final float right = getPoint(stop);
         if (right <= getTotalWidth()) {
-            drawSerif(canvas, stop, 20, 20, edgeSerifPaint);
+            drawSerif(canvas, stop, 20, 20, paints.edgeSerif);
         }
     }
 
@@ -236,7 +206,7 @@ public class TimelineView extends View {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
-            drawSerif(canvas, start, 20, 0, mainSerifPaint);
+            drawSerif(canvas, start, 20, 0, paints.mainSerif);
         }
     }
 
@@ -247,9 +217,9 @@ public class TimelineView extends View {
         final float left = Math.max(0, getPoint(start));
         final float right = Math.min(getPoint(stop), getTotalWidth());
         final float middle = (left + right) / 2;
-        if (middle >= (mainTextPaint.measureText(text) + 10) / 2 &&
-                middle <= getTotalWidth() - (mainTextPaint.measureText(text) + 10) / 2) {
-            canvas.drawText(text, middle, -10, mainTextPaint);
+        if (middle >= (paints.mainText.measureText(text) + 10) / 2 &&
+                middle <= getTotalWidth() - (paints.mainText.measureText(text) + 10) / 2) {
+            canvas.drawText(text, middle, -10, paints.mainText);
         }
     }
 
@@ -269,7 +239,7 @@ public class TimelineView extends View {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
-            drawSerif(canvas, start, 0, 15, secondarySerifPaint);
+            drawSerif(canvas, start, 0, 15, paints.secondarySerif);
         }
     }
 
@@ -279,9 +249,9 @@ public class TimelineView extends View {
         final float left = Math.max(0, getPoint(start));
         final float right = Math.min(getPoint(stop), getTotalWidth());
         final String text = DateTimeUtils.getDownString(start, secondaryPeriod);
-        if (right >= (secondaryTextPaint.measureText(text) + 15) &&
-                left <= getTotalWidth() - (secondaryTextPaint.measureText(text) + 10)) {
-            canvas.drawText(text, left + 10, 20, secondaryTextPaint);
+        if (right >= (paints.secondaryText.measureText(text) + 15) &&
+                left <= getTotalWidth() - (paints.secondaryText.measureText(text) + 10)) {
+            canvas.drawText(text, left + 10, 20, paints.secondaryText);
         }
     }
 
