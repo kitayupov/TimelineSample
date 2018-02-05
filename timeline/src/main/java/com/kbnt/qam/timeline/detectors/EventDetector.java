@@ -6,8 +6,8 @@ import android.view.MotionEvent;
 import com.kbnt.qam.timeline.TimelineView;
 import com.kbnt.qam.timeline.channel.Channel;
 import com.kbnt.qam.timeline.channel.Track;
-import com.kbnt.qam.timeline.date.TimeInterval;
 import com.kbnt.qam.timeline.parameters.DrawChannels;
+import com.kbnt.qam.timeline.parameters.IntervalHelper;
 
 import org.joda.time.DateTime;
 
@@ -27,10 +27,10 @@ public class EventDetector {
     private Track clickedTrack;
 
     private TimelineView view;
-    private TimeInterval interval;
+    private IntervalHelper interval;
     private DrawChannels channels;
 
-    public EventDetector(TimelineView view, TimeInterval interval, DrawChannels channels) {
+    public EventDetector(TimelineView view, IntervalHelper interval, DrawChannels channels) {
         this.view = view;
         this.interval = interval;
         this.channels = channels;

@@ -18,6 +18,7 @@ import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
 import com.kbnt.qam.timeline.detectors.EventDetector;
 import com.kbnt.qam.timeline.parameters.DrawChannels;
+import com.kbnt.qam.timeline.parameters.IntervalHelper;
 import com.kbnt.qam.timeline.parameters.PaintLines;
 
 import org.joda.time.DateTime;
@@ -27,17 +28,12 @@ import java.util.List;
 
 public class TimelineView extends View {
 
-    private static final int MAX_COUNT = 20;
-
-    private static final float MIN_SCALE_FACTOR = 1.F;
-    private static float MAX_SCALE_FACTOR;
-
-    private TimeInterval interval;
     private PaintLines paints;
     private DrawChannels channels;
 
+    private IntervalHelper interval;
+
     private long dateX = 0;
-    private float scaleFactor = MIN_SCALE_FACTOR;
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
@@ -71,20 +67,14 @@ public class TimelineView extends View {
             }
         }
         interval.setInterval(start, stop);
-        MAX_SCALE_FACTOR = interval.getMaxFactor();
         setMeasuredDimension(getWidth(), calculateHeight());
         invalidate();
     }
 
     private void init() {
-
         paints = new PaintLines();
-
-        interval = TimeInterval.getInstance();
-        interval.setMaxCount(MAX_COUNT);
-
-        MAX_SCALE_FACTOR = interval.getMaxFactor();
         channels = new DrawChannels();
+        interval = new IntervalHelper();
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
@@ -107,8 +97,9 @@ public class TimelineView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        final long interval = this.interval.getInterval();
-        dateX = (long) Math.max(0, Math.min(dateX, interval - interval / scaleFactor));
+        final long duration = interval.getDuration();
+        final float scaleFactor = interval.getScaleFactor();
+        dateX = (long) Math.max(0, Math.min(dateX, duration - duration / scaleFactor));
 
         canvas.save();
         canvas.translate(getPaddingStart(), getRelativeTop());
@@ -158,7 +149,7 @@ public class TimelineView extends View {
     }
 
     private void drawSegments(Canvas canvas) {
-        final TimeInterval.TimePeriod secondaryPeriod = interval.getCountPeriod(scaleFactor);
+        final TimeInterval.TimePeriod secondaryPeriod = interval.getCountPeriod();
         final TimeInterval.TimePeriod mainPeriod = secondaryPeriod.previous();
         final DateTime start = interval.getStart().plus(getDate(0));
         final DateTime stop = interval.getStart().plus(getDate(getTotalWidth()));
@@ -263,14 +254,16 @@ public class TimelineView extends View {
     private float getPoint(DateTime dateTime) {
         final long date = dateTime.minus(dateX).getMillis();
         final long start = interval.getStart().getMillis();
-        final long interval = this.interval.getInterval();
-        return (float) (date - start) / interval * (getTotalWidth() * scaleFactor);
+        final long duration = interval.getDuration();
+        final float scaleFactor = interval.getScaleFactor();
+        return (float) (date - start) / duration * (getTotalWidth() * scaleFactor);
     }
 
     public long getDate(float pointX) {
-        final long interval = this.interval.getInterval();
         final int width = getTotalWidth();
-        return (long) ((pointX / width) * (interval / scaleFactor)) + dateX;
+        final long duration = interval.getDuration();
+        final float scaleFactor = interval.getScaleFactor();
+        return (long) ((pointX / width) * (duration / scaleFactor)) + dateX;
     }
 
     @Override
@@ -285,8 +278,7 @@ public class TimelineView extends View {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             final float scale = detector.getScaleFactor();
-            scaleFactor = Math.max(MIN_SCALE_FACTOR, Math.min(scaleFactor * scale, MAX_SCALE_FACTOR));
-            if (scaleFactor > MIN_SCALE_FACTOR && scaleFactor < MAX_SCALE_FACTOR) {
+            if (interval.enlargeScaleFactor(scale)) {
                 final long date = getDate(detector.getFocusX());
                 float diff = date - dateX;
                 diff = diff / scale - diff;
