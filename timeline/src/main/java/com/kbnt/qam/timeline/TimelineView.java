@@ -16,13 +16,13 @@ import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
+import com.kbnt.qam.timeline.detectors.EventDetector;
 import com.kbnt.qam.timeline.parameters.DrawChannels;
 import com.kbnt.qam.timeline.parameters.PaintLines;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class TimelineView extends View {
@@ -38,9 +38,6 @@ public class TimelineView extends View {
 
     private long dateX = 0;
     private float scaleFactor = MIN_SCALE_FACTOR;
-
-    private DateTime clickedDate;
-    private Track clickedTrack;
 
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mScrollDetector;
@@ -91,7 +88,7 @@ public class TimelineView extends View {
 
         mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
         mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
-        mEventDetector = new EventDetector();
+        mEventDetector = new EventDetector(this, interval, channels);
     }
 
     @Override
@@ -148,6 +145,8 @@ public class TimelineView extends View {
                 final int bottom = channels.getChannelBottom(index);
                 canvas.drawRect(startX, top, stopX, bottom, paints.edgeSerif);
 
+                final DateTime clickedDate = mEventDetector.getClickedDate();
+                final Track clickedTrack = mEventDetector.getClickedTrack();
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
                     if (point >= 0 && point <= getTotalWidth()) {
@@ -268,7 +267,7 @@ public class TimelineView extends View {
         return (float) (date - start) / interval * (getTotalWidth() * scaleFactor);
     }
 
-    private long getDate(float pointX) {
+    public long getDate(float pointX) {
         final long interval = this.interval.getInterval();
         final int width = getTotalWidth();
         return (long) ((pointX / width) * (interval / scaleFactor)) + dateX;
@@ -280,26 +279,6 @@ public class TimelineView extends View {
         mScrollDetector.onTouchEvent(event);
         mEventDetector.onTouchEvent(event);
         return true;
-    }
-
-    private Channel getChannel(float y) {
-        for (int index = 0; index < channels.size(); index++) {
-            final int top = channels.getChannelTop(index);
-            final int bottom = channels.getChannelBottom(index);
-            if (y + 10 >= top && y - 10 <= bottom) {
-                return channels.get(index);
-            }
-        }
-        return null;
-    }
-
-    private Track getTrack(Channel channel, DateTime date) {
-        for (Track track : channel.getTracks()) {
-            if (track.contains(date)) {
-                return track;
-            }
-        }
-        return null;
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -327,73 +306,7 @@ public class TimelineView extends View {
         }
     }
 
-    private class EventDetector {
-
-        private static final int CLICK_ACTION_THRESHOLD = 200;
-        private static final int MOVE_ACTION_THRESHOLD = 10;
-
-        private long startClickTime;
-        private float startMove;
-
-        private OnTrackClickListener mOnTrackClickListener;
-
-        void onTouchEvent(MotionEvent event) {
-            final float x = event.getX();
-            final float y = event.getY();
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    startClickTime = Calendar.getInstance().getTimeInMillis();
-                    startMove = x;
-                    break;
-                case MotionEvent.ACTION_UP:
-                    final long duration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-                    if (duration < CLICK_ACTION_THRESHOLD) {
-                        performClick(x, y);
-                        invalidate();
-                    }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    final float distance = Math.abs(x - startMove);
-                    if (distance > MOVE_ACTION_THRESHOLD) {
-                        startClickTime = 0;
-                    }
-                    break;
-            }
-        }
-
-        private void performClick(float x, float y) {
-            final Channel channel = getChannel(y - getRelativeTop());
-            if (channel != null) {
-                final long datePoint = getDate(x - getPaddingStart());
-                clickedDate = interval.getStart().plus(datePoint);
-                clickedTrack = getTrack(channel, clickedDate);
-                if (clickedTrack != null) {
-                    if (mOnTrackClickListener != null) {
-                        mOnTrackClickListener.onTrackClick(clickedTrack, clickedDate);
-                        return;
-                    }
-                } else if (mOnTrackClickListener != null) {
-                    mOnTrackClickListener.onFailure(x, y, "no clickedTrack found in this point");
-                }
-            } else if (mOnTrackClickListener != null) {
-                mOnTrackClickListener.onFailure(x, y, "no channel found in the point");
-            }
-            clickedDate = null;
-            clickedTrack = null;
-        }
-
-        void setOnEpisodeClickListener(OnTrackClickListener onTrackClickListener) {
-            this.mOnTrackClickListener = onTrackClickListener;
-        }
-    }
-
-    public void setOnTrackClickListener(OnTrackClickListener onTrackClickListener) {
-        mEventDetector.setOnEpisodeClickListener(onTrackClickListener);
-    }
-
-    public interface OnTrackClickListener {
-        void onTrackClick(Track track, DateTime dateTime);
-
-        void onFailure(float x, float y, String message);
+    public void setOnTrackClickListener(EventDetector.OnTrackClickListener onTrackClickListener) {
+        mEventDetector.setOnTrackClickListener(onTrackClickListener);
     }
 }

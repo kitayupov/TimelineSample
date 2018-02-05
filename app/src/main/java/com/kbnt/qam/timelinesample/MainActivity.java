@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.kbnt.qam.timeline.TimelineView;
 import com.kbnt.qam.timeline.channel.Channel;
 import com.kbnt.qam.timeline.channel.Track;
+import com.kbnt.qam.timeline.detectors.EventDetector;
 
 import org.joda.time.DateTime;
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         channels.add(new Channel(tracks3));
 
         final TimelineView timelineView = findViewById(R.id.timeline);
-        timelineView.setOnTrackClickListener(new TimelineView.OnTrackClickListener() {
+        timelineView.setOnTrackClickListener(new EventDetector.OnTrackClickListener() {
             @Override
             public void onTrackClick(Track track, DateTime dateTime) {
                 System.out.println(track);
