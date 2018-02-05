@@ -38,6 +38,10 @@ public class TimelineView extends View {
     private Paint mainTextPaint;
     private Paint secondaryTextPaint;
 
+    private static final int TRACKS_MARGIN_TOP = 40;
+    private static final int TRACK_HEIGHT = 30;
+    private static final int TRACK_MARGIN = 20;
+
     private TimeInterval interval;
     private ArrayList<Channel> channels;
 
@@ -132,7 +136,7 @@ public class TimelineView extends View {
     }
 
     private int calculateHeight() {
-        return 40 + 50 * channels.size() + getPaddingTop() + getPaddingBottom();
+        return TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * channels.size() + getPaddingTop() + getPaddingBottom();
     }
 
     @Override
@@ -150,7 +154,7 @@ public class TimelineView extends View {
     }
 
     private int getRelativeTop() {
-        final int height = 40 + 50 * (channels.size() - 1);
+        final int height = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * (channels.size() - 1);
         return (getHeight() - height) / 2;
     }
 
@@ -173,8 +177,8 @@ public class TimelineView extends View {
             final float stopX = Math.min(getTotalWidth(), getPoint(new DateTime(stop)));
 
             if (startX < stopX) {
-                final int top = 40 + 50 * index;
-                final int bottom = top + 30;
+                final int top = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * index;
+                final int bottom = top + TRACK_HEIGHT;
                 canvas.drawRect(startX, top, stopX, bottom, edgeSerifPaint);
 
                 if (track.equals(clickedTrack) && clickedDate != null) {
@@ -313,8 +317,8 @@ public class TimelineView extends View {
 
     private Channel getChannel(float y) {
         for (int i = 0; i < channels.size(); i++) {
-            final int top = 40 + 50 * i;
-            final int bottom = top + 30;
+            final int top = TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * i;
+            final int bottom = top + TRACK_HEIGHT;
             if (y + 10 >= top && y - 10 <= bottom) {
                 return channels.get(i);
             }
