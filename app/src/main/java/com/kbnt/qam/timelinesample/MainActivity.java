@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.kbnt.qam.timeline.TimelineView;
 import com.kbnt.qam.timeline.channel.Channel;
 import com.kbnt.qam.timeline.channel.Track;
-import com.kbnt.qam.timeline.detectors.EventDetector;
+import com.kbnt.qam.timeline.detector.EventDetector;
 
 import org.joda.time.DateTime;
 

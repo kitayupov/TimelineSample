@@ -1,4 +1,4 @@
-package com.kbnt.qam.timeline.detectors;
+package com.kbnt.qam.timeline.detector;
 
 
 import android.view.MotionEvent;
@@ -30,21 +30,21 @@ public class EventDetector {
     private IntervalHelper interval;
     private ChannelsHelper channels;
 
-    public EventDetector(TimelineView view, IntervalHelper interval, ChannelsHelper channels) {
+    EventDetector(TimelineView view, IntervalHelper interval, ChannelsHelper channels) {
         this.view = view;
         this.interval = interval;
         this.channels = channels;
     }
 
-    public DateTime getClickedDate() {
+    DateTime getClickedDate() {
         return clickedDate;
     }
 
-    public Track getClickedTrack() {
+    Track getClickedTrack() {
         return clickedTrack;
     }
 
-    public void onTouchEvent(MotionEvent event) {
+    void onTouchEvent(MotionEvent event) {
         final float x = event.getX();
         final float y = event.getY();
         switch (event.getAction()) {
@@ -114,7 +114,7 @@ public class EventDetector {
         return null;
     }
 
-    public void setOnTrackClickListener(OnTrackClickListener onTrackClickListener) {
+    void setOnTrackClickListener(OnTrackClickListener onTrackClickListener) {
         this.mOnTrackClickListener = onTrackClickListener;
     }
 

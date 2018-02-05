@@ -6,9 +6,7 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.kbnt.qam.timeline.channel.Channel;
@@ -16,7 +14,8 @@ import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.date.DateSegment;
 import com.kbnt.qam.timeline.date.DateTimeUtils;
 import com.kbnt.qam.timeline.date.TimeInterval;
-import com.kbnt.qam.timeline.detectors.EventDetector;
+import com.kbnt.qam.timeline.detector.Detectors;
+import com.kbnt.qam.timeline.detector.EventDetector;
 import com.kbnt.qam.timeline.helpers.ChannelsHelper;
 import com.kbnt.qam.timeline.helpers.IntervalHelper;
 import com.kbnt.qam.timeline.helpers.PaintsHelper;
@@ -32,9 +31,7 @@ public class TimelineView extends View {
     private ChannelsHelper channels;
     private IntervalHelper interval;
 
-    private ScaleGestureDetector mScaleDetector;
-    private GestureDetector mScrollDetector;
-    private EventDetector mEventDetector;
+    private Detectors detectors;
 
     public TimelineView(Context context) {
         this(context, null);
@@ -57,10 +54,7 @@ public class TimelineView extends View {
         paints = new PaintsHelper();
         channels = new ChannelsHelper();
         interval = new IntervalHelper(this);
-
-        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        mScrollDetector = new GestureDetector(getContext(), new ScrollListener());
-        mEventDetector = new EventDetector(this, interval, channels);
+        detectors = new Detectors(this, interval, channels);
     }
 
     public void setChannels(ArrayList<Channel> channels) {
@@ -129,8 +123,8 @@ public class TimelineView extends View {
                 final int bottom = channels.getChannelBottom(index);
                 canvas.drawRect(startX, top, stopX, bottom, paints.edgeSerif);
 
-                final DateTime clickedDate = mEventDetector.getClickedDate();
-                final Track clickedTrack = mEventDetector.getClickedTrack();
+                final DateTime clickedDate = detectors.getClickedDate();
+                final Track clickedTrack = detectors.getClickedTrack();
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
                     if (point >= 0 && point <= getTotalWidth()) {
@@ -148,11 +142,8 @@ public class TimelineView extends View {
         final DateTime stop = interval.getStart().plus(getDate(getTotalWidth()));
         final List<DateSegment> segments = getSegments(new DateSegment(start, stop), mainPeriod);
         for (DateSegment segment : segments) {
-            // Draws line serif line
             drawMainSerifLine(canvas, segment);
-            // Draws line serif text
             drawMainSerifText(canvas, secondaryPeriod, segment);
-            // Draws secondary serifs
             drawSecondarySerifs(canvas, secondaryPeriod, segment);
         }
         drawMainEdges(canvas);
@@ -207,9 +198,7 @@ public class TimelineView extends View {
         final List<DateSegment> secondarySegments = getSegments(mainSegment, secondaryPeriod);
         for (DateSegment segment : secondarySegments) {
             if (getPoint(segment.stop) >= 0 && getPoint(segment.start) <= getTotalWidth()) {
-                // Draws secondary serif line
                 drawSecondarySerifLine(canvas, segment);
-                // Draws secondary serif text
                 drawSecondarySerifText(canvas, secondaryPeriod, segment);
             }
         }
@@ -263,31 +252,11 @@ public class TimelineView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
-        mScrollDetector.onTouchEvent(event);
-        mEventDetector.onTouchEvent(event);
+        detectors.onTouchEvent(event);
         return true;
     }
 
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            interval.scale(detector);
-            invalidate();
-            return true;
-        }
-    }
-
-    private class ScrollListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            interval.scroll(distanceX);
-            invalidate();
-            return super.onScroll(e1, e2, distanceX, distanceY);
-        }
-    }
-
     public void setOnTrackClickListener(EventDetector.OnTrackClickListener onTrackClickListener) {
-        mEventDetector.setOnTrackClickListener(onTrackClickListener);
+        detectors.setOnTrackClickListener(onTrackClickListener);
     }
 }
