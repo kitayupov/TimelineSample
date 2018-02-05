@@ -179,7 +179,9 @@ public class TimelineView extends View {
 
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
-                    canvas.drawLine(point, top, point, bottom, linePaint);
+                    if (point >= 0 && point <= getTotalWidth()) {
+                        canvas.drawLine(point, top, point, bottom, linePaint);
+                    }
                 }
             }
         }
