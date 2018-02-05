@@ -12,7 +12,7 @@ class AttributesHolder {
 
     private static final float DEFAULT_STROKE = 4.0F;
     private static final float DEFAULT_TEXT_SIZE = 18.0F;
-    private static final int DEFAULT_SERIF_HEIGHT = 20;
+    private static final float DEFAULT_SERIF_HEIGHT = 20.0F;
 
     private final TypedArray array;
 
@@ -25,7 +25,7 @@ class AttributesHolder {
     }
 
     private float getStroke(int strokeAttribute, float defaultStroke) {
-        return array.getFloat(strokeAttribute, defaultStroke);
+        return array.getDimension(strokeAttribute, defaultStroke);
     }
 
 
@@ -33,8 +33,8 @@ class AttributesHolder {
         return array.getDimension(strokeAttribute, defaultTextSize);
     }
 
-    private int getHeight(int timelineView_edgeHeight, int defaultValue) {
-        return array.getInt(timelineView_edgeHeight, defaultValue);
+    private int getHeight(int heightAttribute, float defaultValue) {
+        return (int) array.getDimension(heightAttribute, defaultValue);
     }
 
     Paint getBaselinePaint() {
@@ -53,8 +53,8 @@ class AttributesHolder {
 
     Paint getPrimarySerifPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_mainSerifColor, Color.GREEN));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_mainSerifStroke, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.TimelineView_primarySerifColor, Color.GREEN));
+        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_primarySerifStroke, DEFAULT_STROKE));
         return paint;
     }
 
@@ -67,16 +67,16 @@ class AttributesHolder {
 
     Paint getPrimaryTextPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_mainTextColor, Color.GREEN));
-        paint.setTextSize(getTextSize(R.styleable.TimelineView_mainTextSize, DEFAULT_TEXT_SIZE));
+        paint.setColor(getColor(R.styleable.TimelineView_primaryTextColor, Color.GREEN));
+        paint.setTextSize(getTextSize(R.styleable.TimelineView_primaryTextSize, DEFAULT_TEXT_SIZE));
         paint.setTextAlign(Paint.Align.CENTER);
         return paint;
     }
 
     Paint getSecondaryTextPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_mainTextColor, Color.LTGRAY));
-        paint.setTextSize(getTextSize(R.styleable.TimelineView_mainTextSize, DEFAULT_TEXT_SIZE));
+        paint.setColor(getColor(R.styleable.TimelineView_secondaryTextColor, Color.LTGRAY));
+        paint.setTextSize(getTextSize(R.styleable.TimelineView_secondaryTextSize, DEFAULT_TEXT_SIZE));
         paint.setTextAlign(Paint.Align.LEFT);
         return paint;
     }
