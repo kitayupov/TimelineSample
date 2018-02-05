@@ -92,4 +92,17 @@ class AttributesHolder {
     int getSecondarySerifHeight() {
         return getHeight(R.styleable.TimelineView_secondarySerifHeight, DEFAULT_SERIF_HEIGHT);
     }
+
+    Paint getTrackPaint() {
+        final Paint paint = new Paint();
+        paint.setColor(getColor(R.styleable.TimelineView_trackColor, Color.YELLOW));
+        return paint;
+    }
+
+    Paint getCursorPaint() {
+        final Paint paint = new Paint();
+        paint.setColor(getColor(R.styleable.TimelineView_cursorColor, Color.RED));
+        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_cursorWidth, DEFAULT_STROKE));
+        return paint;
+    }
 }

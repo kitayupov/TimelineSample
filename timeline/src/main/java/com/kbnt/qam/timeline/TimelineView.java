@@ -121,14 +121,14 @@ public class TimelineView extends View {
             if (startX < stopX) {
                 final int top = channels.getChannelTop(index);
                 final int bottom = channels.getChannelBottom(index);
-                canvas.drawRect(startX, top, stopX, bottom, paints.edgeSerif);
+                canvas.drawRect(startX, top, stopX, bottom, paints.trackPaint);
 
                 final DateTime clickedDate = detectors.getClickedDate();
                 final Track clickedTrack = detectors.getClickedTrack();
                 if (track.equals(clickedTrack) && clickedDate != null) {
                     final float point = getPoint(clickedDate);
                     if (point >= 0 && point <= getTotalWidth()) {
-                        canvas.drawLine(point, top, point, bottom, paints.baseline);
+                        canvas.drawLine(point, top, point, bottom, paints.cursorPaint);
                     }
                 }
             }

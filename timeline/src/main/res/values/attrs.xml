@@ -14,5 +14,8 @@
         <attr name="edgeHeight" format="integer" />
         <attr name="primarySerifHeight" format="integer" />
         <attr name="secondarySerifHeight" format="integer" />
+        <attr name="trackColor" format="color" />
+        <attr name="cursorColor" format="color" />
+        <attr name="cursorWidth" format="float" />
     </declare-styleable>
 </resources>
