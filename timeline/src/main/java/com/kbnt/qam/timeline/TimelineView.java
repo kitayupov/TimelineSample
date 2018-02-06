@@ -3,7 +3,6 @@ package com.kbnt.qam.timeline;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -82,25 +81,9 @@ public class TimelineView extends View {
     }
 
     private int getTotalHeight() {
-        final int height = getTimelineBarHeight();
-        return height + channels.getHeight() + getPaddingTop() + getPaddingBottom();
-    }
-
-    private int getTimelineBarHeight() {
-        return Math.max(getPrimaryTextHeight(), Math.max(paints.primarySerifHeight, paints.edgeHeight))
-                + Math.max(getSecondaryTextHeight(), Math.max(paints.secondarySerifHeight, paints.edgeHeight));
-    }
-
-    private int getPrimaryTextHeight() {
-        final Rect bounds = new Rect();
-        paints.primaryText.getTextBounds("1970", 0, 1, bounds);
-        return bounds.height() + paints.primaryTextMargin;
-    }
-
-    private int getSecondaryTextHeight() {
-        final Rect bounds = new Rect();
-        paints.secondaryText.getTextBounds("1970", 0, 1, bounds);
-        return bounds.height() + paints.secondaryTextMargin;
+        final int height = paints.getTotalHeight();
+        final int channelsHeight = channels.getHeight();
+        return height + channelsHeight + getPaddingTop() + getPaddingBottom();
     }
 
     @Override
@@ -115,8 +98,9 @@ public class TimelineView extends View {
     }
 
     private int getRelativeTop() {
-        final int height = channels.getHeight();
-        return (getHeight() - height) / 2;
+        final int height = getHeight();
+        final int channelsHeight = channels.getHeight();
+        return (height - channelsHeight) / 2;
     }
 
     private void drawTimelineBar(Canvas canvas) {
@@ -239,7 +223,7 @@ public class TimelineView extends View {
         final String text = DateTimeUtils.getDownString(start, secondaryPeriod);
         if (right >= (paints.secondaryText.measureText(text) + 15) &&
                 left <= getTotalWidth() - (paints.secondaryText.measureText(text) + 10)) {
-            canvas.drawText(text, left + 10, getSecondaryTextHeight(), paints.secondaryText);
+            canvas.drawText(text, left + 10, paints.getSecondaryTextHeight(), paints.secondaryText);
         }
     }
 
