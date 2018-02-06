@@ -15,6 +15,10 @@ class AttributesHolder {
     private static final float DEFAULT_SERIF_HEIGHT = 20.0F;
     private static final float DEFAULT_TEXT_MARGIN = 8.0F;
 
+    private static final float DEFAULT_CHANNELS_MARGIN_TOP = 15.0F;
+    private static final float DEFAULT_CHANNEL_HEIGHT = 20.0F;
+    private static final float DEFAULT_CHANNEL_MARGIN = 10.0F;
+
     private final TypedArray array;
 
     AttributesHolder(Context context, AttributeSet attrs) {
@@ -113,5 +117,17 @@ class AttributesHolder {
 
     int getSecondaryTextMargin() {
         return getHeight(R.styleable.TimelineView_secondaryTextMargin, DEFAULT_TEXT_MARGIN);
+    }
+
+    int getChannelsMarginTop() {
+        return getHeight(R.styleable.TimelineView_channelsMarginTop, DEFAULT_CHANNELS_MARGIN_TOP);
+    }
+
+    int getChannelHeight() {
+        return getHeight(R.styleable.TimelineView_channelHeight, DEFAULT_CHANNEL_HEIGHT);
+    }
+
+    int getChannelMargin() {
+        return getHeight(R.styleable.TimelineView_channelMargin, DEFAULT_CHANNEL_MARGIN);
     }
 }

@@ -23,6 +23,10 @@ public class PaintsHelper {
     public final int primaryTextMargin;
     private final int secondaryTextMargin;
 
+    final int channelsMarginTop;
+    final int channelHeight;
+    final int channelMargin;
+
     public PaintsHelper(Context context, AttributeSet attrs) {
         final AttributesHolder attributes = new AttributesHolder(context, attrs);
         baseline = attributes.getBaselinePaint();
@@ -38,6 +42,9 @@ public class PaintsHelper {
         cursorPaint = attributes.getCursorPaint();
         primaryTextMargin = attributes.getPrimaryTextMargin();
         secondaryTextMargin = attributes.getSecondaryTextMargin();
+        channelsMarginTop = attributes.getChannelsMarginTop();
+        channelHeight = attributes.getChannelHeight();
+        channelMargin = attributes.getChannelMargin();
     }
 
     public int getTotalHeight() {

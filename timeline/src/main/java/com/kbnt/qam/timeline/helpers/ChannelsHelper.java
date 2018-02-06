@@ -6,16 +6,16 @@ import java.util.ArrayList;
 
 public class ChannelsHelper {
 
-    private static final int TRACKS_MARGIN_TOP = 40;
-    private static final int TRACK_HEIGHT = 30;
-    private static final int TRACK_MARGIN = 20;
-
-    private final int topMargin;
+    private final int channelsMarginTop;
+    private final int channelHeight;
+    private final int channelMargin;
 
     private ArrayList<Channel> channels;
 
     public ChannelsHelper(PaintsHelper paints) {
-        topMargin = paints.getBottomHeight() + TRACKS_MARGIN_TOP;
+        channelsMarginTop = paints.getBottomHeight() + paints.channelsMarginTop;
+        channelHeight = paints.channelHeight;
+        channelMargin = paints.channelMargin;
         channels = new ArrayList<>();
     }
 
@@ -24,7 +24,7 @@ public class ChannelsHelper {
     }
 
     public int getHeight() {
-        return topMargin + (TRACK_MARGIN + TRACK_HEIGHT) * (channels.size() - 1);
+        return channelsMarginTop + (channelMargin + channelHeight) * (channels.size() - 1);
     }
 
     public int size() {
@@ -32,11 +32,11 @@ public class ChannelsHelper {
     }
 
     public int getChannelTop(int index) {
-        return topMargin + (TRACK_MARGIN + TRACK_HEIGHT) * index;
+        return channelsMarginTop + (channelMargin + channelHeight) * index;
     }
 
     public int getChannelBottom(int index) {
-        return getChannelTop(index) + TRACK_HEIGHT;
+        return getChannelTop(index) + channelHeight;
     }
 
     public Channel get(int index) {

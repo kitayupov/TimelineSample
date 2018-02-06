@@ -21,5 +21,8 @@
         <attr name="cursorWidth" format="dimension" />
         <attr name="primaryTextMargin" format="dimension" />
         <attr name="secondaryTextMargin" format="dimension" />
+        <attr name="channelsMarginTop" format="dimension" />
+        <attr name="channelHeight" format="dimension" />
+        <attr name="channelMargin" format="dimension" />
     </declare-styleable>
 </resources>
