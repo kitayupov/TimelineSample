@@ -19,6 +19,9 @@ public class PaintsHelper {
     public final int primarySerifHeight;
     public final int secondarySerifHeight;
 
+    public final int primaryTextMargin;
+    public final int secondaryTextMargin;
+
     public PaintsHelper(Context context, AttributeSet attrs) {
         final AttributesHolder attributes = new AttributesHolder(context, attrs);
         baseline = attributes.getBaselinePaint();
@@ -32,5 +35,7 @@ public class PaintsHelper {
         secondarySerifHeight = attributes.getSecondarySerifHeight();
         trackPaint = attributes.getTrackPaint();
         cursorPaint = attributes.getCursorPaint();
+        primaryTextMargin = attributes.getPrimaryTextMargin();
+        secondaryTextMargin = attributes.getSecondaryTextMargin();
     }
 }

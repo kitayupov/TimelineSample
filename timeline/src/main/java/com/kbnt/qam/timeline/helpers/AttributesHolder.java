@@ -13,6 +13,7 @@ class AttributesHolder {
     private static final float DEFAULT_STROKE = 4.0F;
     private static final float DEFAULT_TEXT_SIZE = 18.0F;
     private static final float DEFAULT_SERIF_HEIGHT = 20.0F;
+    private static final float DEFAULT_TEXT_MARGIN = 8.0F;
 
     private final TypedArray array;
 
@@ -104,5 +105,13 @@ class AttributesHolder {
         paint.setColor(getColor(R.styleable.TimelineView_cursorColor, Color.RED));
         paint.setStrokeWidth(getStroke(R.styleable.TimelineView_cursorWidth, DEFAULT_STROKE));
         return paint;
+    }
+
+    int getPrimaryTextMargin() {
+        return getHeight(R.styleable.TimelineView_primaryTextMargin, DEFAULT_TEXT_MARGIN);
+    }
+
+    int getSecondaryTextMargin() {
+        return getHeight(R.styleable.TimelineView_secondaryTextMargin, DEFAULT_TEXT_MARGIN);
     }
 }

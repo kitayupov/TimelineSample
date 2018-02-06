@@ -19,5 +19,7 @@
         <attr name="trackColor" format="color" />
         <attr name="cursorColor" format="color" />
         <attr name="cursorWidth" format="dimension" />
+        <attr name="primaryTextMargin" format="dimension" />
+        <attr name="secondaryTextMargin" format="dimension" />
     </declare-styleable>
 </resources>

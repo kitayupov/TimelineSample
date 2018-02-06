@@ -28,9 +28,6 @@ import java.util.List;
 
 public class TimelineView extends View {
 
-    private static final int PRIMARY_TEXT_MARGIN = 8;
-    private static final int SECONDARY_TEXT_MARGIN = 8;
-
     private PaintsHelper paints;
     private ChannelsHelper channels;
     private IntervalHelper interval;
@@ -97,13 +94,13 @@ public class TimelineView extends View {
     private int getPrimaryTextHeight() {
         final Rect bounds = new Rect();
         paints.primaryText.getTextBounds("1970", 0, 1, bounds);
-        return bounds.height() + PRIMARY_TEXT_MARGIN;
+        return bounds.height() + paints.primaryTextMargin;
     }
 
     private int getSecondaryTextHeight() {
         final Rect bounds = new Rect();
         paints.secondaryText.getTextBounds("1970", 0, 1, bounds);
-        return bounds.height() + SECONDARY_TEXT_MARGIN;
+        return bounds.height() + paints.secondaryTextMargin;
     }
 
     @Override
@@ -212,7 +209,7 @@ public class TimelineView extends View {
         final float middle = (left + right) / 2;
         if (middle >= (paints.primaryText.measureText(text) + 10) / 2 &&
                 middle <= getTotalWidth() - (paints.primaryText.measureText(text) + 10) / 2) {
-            canvas.drawText(text, middle, -PRIMARY_TEXT_MARGIN, paints.primaryText);
+            canvas.drawText(text, middle, -paints.primaryTextMargin, paints.primaryText);
         }
     }
 

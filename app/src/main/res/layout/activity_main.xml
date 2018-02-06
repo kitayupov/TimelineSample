@@ -29,6 +29,8 @@
         app:trackColor="@color/colorPrimary"
         app:cursorColor="@color/colorAccent"
         app:cursorWidth="1dp"
+        app:primaryTextMargin="4dp"
+        app:secondaryTextMargin="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
