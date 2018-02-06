@@ -24,7 +24,7 @@ public class ChannelsHelper {
     }
 
     public int getHeight() {
-        return channelsMarginTop + (channelMargin + channelHeight) * (channels.size() - 1);
+        return channelsMarginTop + channelHeight * channels.size() + channelMargin * (channels.size() - 1);
     }
 
     public int size() {
