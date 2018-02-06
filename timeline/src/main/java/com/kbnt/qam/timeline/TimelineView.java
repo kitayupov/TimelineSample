@@ -52,7 +52,7 @@ public class TimelineView extends View {
 
     private void initialize(Context context, AttributeSet attrs) {
         paints = new PaintsHelper(context, attrs);
-        channels = new ChannelsHelper();
+        channels = new ChannelsHelper(paints);
         interval = new IntervalHelper(this);
         detectors = new Detectors(this, interval, channels);
     }
@@ -81,9 +81,9 @@ public class TimelineView extends View {
     }
 
     private int getTotalHeight() {
-        final int height = paints.getTotalHeight();
+        final int timelineBarHeight = paints.getTotalHeight();
         final int channelsHeight = channels.getHeight();
-        return height + channelsHeight + getPaddingTop() + getPaddingBottom();
+        return timelineBarHeight + channelsHeight + getPaddingTop() + getPaddingBottom();
     }
 
     @Override

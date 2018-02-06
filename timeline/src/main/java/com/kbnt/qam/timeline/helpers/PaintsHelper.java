@@ -41,8 +41,15 @@ public class PaintsHelper {
     }
 
     public int getTotalHeight() {
-        return Math.max(getPrimaryTextHeight(), Math.max(primarySerifHeight, edgeHeight))
-                + Math.max(getSecondaryTextHeight(), Math.max(secondarySerifHeight, edgeHeight));
+        return getTopHeight() + getBottomHeight();
+    }
+
+    private int getTopHeight() {
+        return Math.max(getPrimaryTextHeight(), Math.max(primarySerifHeight, edgeHeight));
+    }
+
+    int getBottomHeight() {
+        return Math.max(getSecondaryTextHeight(), Math.max(secondarySerifHeight, edgeHeight));
     }
 
     private int getPrimaryTextHeight() {

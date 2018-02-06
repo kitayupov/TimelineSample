@@ -10,9 +10,12 @@ public class ChannelsHelper {
     private static final int TRACK_HEIGHT = 30;
     private static final int TRACK_MARGIN = 20;
 
+    private final int topMargin;
+
     private ArrayList<Channel> channels;
 
-    public ChannelsHelper() {
+    public ChannelsHelper(PaintsHelper paints) {
+        topMargin = paints.getBottomHeight() + TRACKS_MARGIN_TOP;
         channels = new ArrayList<>();
     }
 
@@ -21,7 +24,7 @@ public class ChannelsHelper {
     }
 
     public int getHeight() {
-        return TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * (channels.size() - 1);
+        return topMargin + (TRACK_MARGIN + TRACK_HEIGHT) * (channels.size() - 1);
     }
 
     public int size() {
@@ -29,7 +32,7 @@ public class ChannelsHelper {
     }
 
     public int getChannelTop(int index) {
-        return TRACKS_MARGIN_TOP + (TRACK_MARGIN + TRACK_HEIGHT) * index;
+        return topMargin + (TRACK_MARGIN + TRACK_HEIGHT) * index;
     }
 
     public int getChannelBottom(int index) {
