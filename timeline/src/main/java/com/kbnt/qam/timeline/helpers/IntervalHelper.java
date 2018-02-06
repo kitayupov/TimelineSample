@@ -2,7 +2,7 @@ package com.kbnt.qam.timeline.helpers;
 
 import android.view.ScaleGestureDetector;
 
-import com.kbnt.qam.timeline.TimelineView;
+import com.kbnt.qam.timeline.Timeline;
 import com.kbnt.qam.timeline.date.TimeInterval;
 
 import org.joda.time.DateTime;
@@ -17,9 +17,9 @@ public class IntervalHelper {
     private long dateX = 0;
 
     private TimeInterval interval;
-    private TimelineView view;
+    private Timeline view;
 
-    public IntervalHelper(TimelineView view) {
+    public IntervalHelper(Timeline view) {
         this.view = view;
         interval = TimeInterval.getInstance();
         interval.setMaxCount(MAX_COUNT);

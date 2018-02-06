@@ -25,7 +25,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimelineView extends View {
+public class Timeline extends View {
 
     private PaintsHelper paints;
     private ChannelsHelper channels;
@@ -33,19 +33,19 @@ public class TimelineView extends View {
 
     private Detectors detectors;
 
-    public TimelineView(Context context) {
+    public Timeline(Context context) {
         this(context, null);
     }
 
-    public TimelineView(Context context, @Nullable AttributeSet attrs) {
+    public Timeline(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TimelineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public Timeline(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public TimelineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public Timeline(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initialize(context, attrs);
     }

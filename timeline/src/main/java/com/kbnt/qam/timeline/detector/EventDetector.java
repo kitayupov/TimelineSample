@@ -3,7 +3,7 @@ package com.kbnt.qam.timeline.detector;
 
 import android.view.MotionEvent;
 
-import com.kbnt.qam.timeline.TimelineView;
+import com.kbnt.qam.timeline.Timeline;
 import com.kbnt.qam.timeline.channel.Channel;
 import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.helpers.ChannelsHelper;
@@ -26,11 +26,11 @@ public class EventDetector {
     private DateTime clickedDate;
     private Track clickedTrack;
 
-    private TimelineView view;
+    private Timeline view;
     private IntervalHelper interval;
     private ChannelsHelper channels;
 
-    EventDetector(TimelineView view, IntervalHelper interval, ChannelsHelper channels) {
+    EventDetector(Timeline view, IntervalHelper interval, ChannelsHelper channels) {
         this.view = view;
         this.interval = interval;
         this.channels = channels;

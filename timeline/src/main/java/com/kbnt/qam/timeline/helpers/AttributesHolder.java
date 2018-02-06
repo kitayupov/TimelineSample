@@ -21,7 +21,7 @@ class AttributesHolder {
     private final TypedArray array;
 
     AttributesHolder(Context context, AttributeSet attrs) {
-        array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TimelineView, 0, R.style.TimelineWidget);
+        array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Timeline, 0, R.style.TimelineWidget);
     }
 
     private int getColor(int colorAttribute, int defaultColor) {
@@ -43,94 +43,94 @@ class AttributesHolder {
 
     Paint getBaselinePaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_baselineColor, Color.RED));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_baselineStroke, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.Timeline_baselineColor, Color.RED));
+        paint.setStrokeWidth(getStroke(R.styleable.Timeline_baselineStroke, DEFAULT_STROKE));
         return paint;
     }
 
     Paint getEdgeSerifPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_edgeSerifColor, Color.YELLOW));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_edgeSerifStroke, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.Timeline_edgeSerifColor, Color.YELLOW));
+        paint.setStrokeWidth(getStroke(R.styleable.Timeline_edgeSerifStroke, DEFAULT_STROKE));
         return paint;
     }
 
     Paint getPrimarySerifPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_primarySerifColor, Color.GREEN));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_primarySerifStroke, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.Timeline_primarySerifColor, Color.GREEN));
+        paint.setStrokeWidth(getStroke(R.styleable.Timeline_primarySerifStroke, DEFAULT_STROKE));
         return paint;
     }
 
     Paint getSecondarySerifPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_secondarySerifColor, Color.LTGRAY));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_secondarySerifStroke, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.Timeline_secondarySerifColor, Color.LTGRAY));
+        paint.setStrokeWidth(getStroke(R.styleable.Timeline_secondarySerifStroke, DEFAULT_STROKE));
         return paint;
     }
 
     Paint getPrimaryTextPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_primaryTextColor, Color.GREEN));
-        paint.setTextSize(getTextSize(R.styleable.TimelineView_primaryTextSize, DEFAULT_TEXT_SIZE));
+        paint.setColor(getColor(R.styleable.Timeline_primaryTextColor, Color.GREEN));
+        paint.setTextSize(getTextSize(R.styleable.Timeline_primaryTextSize, DEFAULT_TEXT_SIZE));
         paint.setTextAlign(Paint.Align.CENTER);
         return paint;
     }
 
     Paint getSecondaryTextPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_secondaryTextColor, Color.LTGRAY));
-        paint.setTextSize(getTextSize(R.styleable.TimelineView_secondaryTextSize, DEFAULT_TEXT_SIZE));
+        paint.setColor(getColor(R.styleable.Timeline_secondaryTextColor, Color.LTGRAY));
+        paint.setTextSize(getTextSize(R.styleable.Timeline_secondaryTextSize, DEFAULT_TEXT_SIZE));
         paint.setTextAlign(Paint.Align.LEFT);
         return paint;
     }
 
     int getEdgePrimaryHeight(int primaryTextHeight) {
-        return getHeight(R.styleable.TimelineView_edgePrimaryHeight, primaryTextHeight);
+        return getHeight(R.styleable.Timeline_edgePrimaryHeight, primaryTextHeight);
     }
 
     int getEdgeSecondaryHeight(int secondaryTextHeight) {
-        return getHeight(R.styleable.TimelineView_edgeSecondaryHeight, secondaryTextHeight);
+        return getHeight(R.styleable.Timeline_edgeSecondaryHeight, secondaryTextHeight);
     }
 
     int getPrimarySerifHeight(int primaryTextHeight) {
-        return getHeight(R.styleable.TimelineView_primarySerifHeight, primaryTextHeight);
+        return getHeight(R.styleable.Timeline_primarySerifHeight, primaryTextHeight);
     }
 
     int getSecondarySerifHeight(int secondaryTextHeight) {
-        return getHeight(R.styleable.TimelineView_secondarySerifHeight, secondaryTextHeight);
+        return getHeight(R.styleable.Timeline_secondarySerifHeight, secondaryTextHeight);
     }
 
     Paint getTrackPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_trackColor, Color.YELLOW));
+        paint.setColor(getColor(R.styleable.Timeline_trackColor, Color.YELLOW));
         return paint;
     }
 
     Paint getCursorPaint() {
         final Paint paint = new Paint();
-        paint.setColor(getColor(R.styleable.TimelineView_cursorColor, Color.RED));
-        paint.setStrokeWidth(getStroke(R.styleable.TimelineView_cursorWidth, DEFAULT_STROKE));
+        paint.setColor(getColor(R.styleable.Timeline_cursorColor, Color.RED));
+        paint.setStrokeWidth(getStroke(R.styleable.Timeline_cursorWidth, DEFAULT_STROKE));
         return paint;
     }
 
     int getPrimaryTextMargin() {
-        return getHeight(R.styleable.TimelineView_primaryTextMargin, DEFAULT_TEXT_MARGIN);
+        return getHeight(R.styleable.Timeline_primaryTextMargin, DEFAULT_TEXT_MARGIN);
     }
 
     int getSecondaryTextMargin() {
-        return getHeight(R.styleable.TimelineView_secondaryTextMargin, DEFAULT_TEXT_MARGIN);
+        return getHeight(R.styleable.Timeline_secondaryTextMargin, DEFAULT_TEXT_MARGIN);
     }
 
     int getChannelsMarginTop() {
-        return getHeight(R.styleable.TimelineView_channelsMarginTop, DEFAULT_CHANNELS_MARGIN_TOP);
+        return getHeight(R.styleable.Timeline_channelsMarginTop, DEFAULT_CHANNELS_MARGIN_TOP);
     }
 
     int getChannelHeight() {
-        return getHeight(R.styleable.TimelineView_channelHeight, DEFAULT_CHANNEL_HEIGHT);
+        return getHeight(R.styleable.Timeline_channelHeight, DEFAULT_CHANNEL_HEIGHT);
     }
 
     int getChannelMargin() {
-        return getHeight(R.styleable.TimelineView_channelMargin, DEFAULT_CHANNEL_MARGIN);
+        return getHeight(R.styleable.Timeline_channelMargin, DEFAULT_CHANNEL_MARGIN);
     }
 }

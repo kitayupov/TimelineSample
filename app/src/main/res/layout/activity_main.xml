@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.kbnt.qam.timelinesample.MainActivity">
 
-    <com.kbnt.qam.timeline.TimelineView
+    <com.kbnt.qam.timeline.Timeline
         android:id="@+id/timeline"
         android:layout_width="0dp"
         android:layout_height="0dp"

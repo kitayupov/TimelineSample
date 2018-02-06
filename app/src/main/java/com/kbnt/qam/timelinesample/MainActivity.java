@@ -3,7 +3,7 @@ package com.kbnt.qam.timelinesample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.kbnt.qam.timeline.TimelineView;
+import com.kbnt.qam.timeline.Timeline;
 import com.kbnt.qam.timeline.channel.Channel;
 import com.kbnt.qam.timeline.channel.Track;
 import com.kbnt.qam.timeline.detector.EventDetector;
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
         }
         channels.add(new Channel(tracks3));
 
-        final TimelineView timelineView = findViewById(R.id.timeline);
-        timelineView.setOnTrackClickListener(new EventDetector.OnTrackClickListener() {
+        final Timeline timeline = findViewById(R.id.timeline);
+        timeline.setOnTrackClickListener(new EventDetector.OnTrackClickListener() {
             @Override
             public void onTrackClick(Track track, DateTime dateTime) {
                 System.out.println(track);
@@ -57,6 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(message);
             }
         });
-        timelineView.setChannels(channels);
+        timeline.setChannels(channels);
     }
 }
