@@ -221,9 +221,9 @@ public class Timeline extends View {
         final float left = Math.max(0, getPoint(start));
         final float right = Math.min(getPoint(stop), getTotalWidth());
         final String text = DateTimeUtils.getDownString(start, secondaryPeriod);
-        if (right >= (paints.secondaryText.measureText(text) + 15) &&
-                left <= getTotalWidth() - (paints.secondaryText.measureText(text) + 10)) {
-            canvas.drawText(text, left + 10, paints.getSecondaryTextHeight(), paints.secondaryText);
+        if (right >= (paints.secondaryText.measureText(text) + 8) &&
+                left <= getTotalWidth() - (paints.secondaryText.measureText(text) + 4)) {
+            canvas.drawText(text, left + 4, paints.getSecondaryTextHeight(), paints.secondaryText);
         }
     }
 
