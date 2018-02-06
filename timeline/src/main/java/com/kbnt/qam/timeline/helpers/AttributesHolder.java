@@ -139,4 +139,10 @@ class AttributesHolder {
         paint.setColor(getColor(R.styleable.Timeline_backgroundTimeline, Color.WHITE));
         return paint;
     }
+
+    Paint getChannelsBackgroundPaint() {
+        final Paint paint = new Paint();
+        paint.setColor(getColor(R.styleable.Timeline_backgroundChannels, Color.WHITE));
+        return paint;
+    }
 }

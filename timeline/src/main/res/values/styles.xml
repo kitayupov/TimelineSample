@@ -22,5 +22,6 @@
         <item name="channelHeight">8dp</item>
         <item name="channelMargin">4dp</item>
         <item name="backgroundTimeline">@android:color/transparent</item>
+        <item name="backgroundChannels">@android:color/transparent</item>
     </style>
 </resources>

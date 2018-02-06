@@ -16,6 +16,7 @@ public class PaintsHelper {
     public final Paint trackPaint;
     public final Paint cursorPaint;
     public final Paint timelineBackground;
+    public final Paint channelsBackground;
 
     public final int edgePrimaryHeight;
     public final int edgeSecondaryHeight;
@@ -49,6 +50,7 @@ public class PaintsHelper {
         channelHeight = attributes.getChannelHeight();
         channelMargin = attributes.getChannelMargin();
         timelineBackground = attributes.getTimelineBackgroundPaint();
+        channelsBackground = attributes.getChannelsBackgroundPaint();
     }
 
     public int getTotalHeight() {

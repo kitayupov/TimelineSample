@@ -26,5 +26,6 @@
         <attr name="channelHeight" format="dimension" />
         <attr name="channelMargin" format="dimension" />
         <attr name="backgroundTimeline" format="color" />
+        <attr name="backgroundChannels" format="color" />
     </declare-styleable>
 </resources>

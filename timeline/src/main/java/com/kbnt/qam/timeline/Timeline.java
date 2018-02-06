@@ -94,6 +94,7 @@ public class Timeline extends View {
         canvas.translate(getPaddingStart(), getRelativeTop());
         drawTimelineBackground(canvas);
         drawTimelineBar(canvas);
+        drawChannelsBackground(canvas);
         drawChannels(canvas);
         canvas.restore();
     }
@@ -115,6 +116,15 @@ public class Timeline extends View {
     private void drawTimelineBar(Canvas canvas) {
         canvas.drawLine(0, 0, getTotalWidth(), 0, paints.baseline);
         drawSegments(canvas);
+    }
+
+    private void drawChannelsBackground(Canvas canvas) {
+        final int count = channels.size();
+        if (count != 0) {
+            final int topChannels = channels.getChannelTop(0);
+            final int bottomChannels = channels.getChannelBottom(channels.size() - 1);
+            canvas.drawRect(0, topChannels, getTotalWidth(), bottomChannels, paints.channelsBackground);
+        }
     }
 
     private void drawChannels(Canvas canvas) {
