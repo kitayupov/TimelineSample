@@ -133,4 +133,10 @@ class AttributesHolder {
     int getChannelMargin() {
         return getHeight(R.styleable.Timeline_channelMargin, DEFAULT_CHANNEL_MARGIN);
     }
+
+    Paint getTimelineBackgroundPaint() {
+        final Paint paint = new Paint();
+        paint.setColor(getColor(R.styleable.Timeline_backgroundTimeline, Color.WHITE));
+        return paint;
+    }
 }

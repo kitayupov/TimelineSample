@@ -92,6 +92,7 @@ public class Timeline extends View {
 
         canvas.save();
         canvas.translate(getPaddingStart(), getRelativeTop());
+        drawTimelineBackground(canvas);
         drawTimelineBar(canvas);
         drawChannels(canvas);
         canvas.restore();
@@ -101,6 +102,14 @@ public class Timeline extends View {
         final int totalHeight = getHeight();
         final int channelsHeight = channels.getHeight();
         return (totalHeight - channelsHeight) / 2;
+    }
+
+    private void drawTimelineBackground(Canvas canvas) {
+        final int topHeight = Math.max(paints.getPrimaryTextHeight(),
+                Math.max(paints.primarySerifHeight, paints.edgePrimaryHeight));
+        final int bottomHeight = Math.max(paints.getSecondaryTextHeight(),
+                Math.max(paints.secondarySerifHeight, paints.edgeSecondaryHeight));
+        canvas.drawRect(0, -topHeight, getTotalWidth(), bottomHeight, paints.timelineBackground);
     }
 
     private void drawTimelineBar(Canvas canvas) {

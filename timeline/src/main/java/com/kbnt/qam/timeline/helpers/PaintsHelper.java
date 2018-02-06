@@ -15,6 +15,7 @@ public class PaintsHelper {
     public final Paint secondaryText;
     public final Paint trackPaint;
     public final Paint cursorPaint;
+    public final Paint timelineBackground;
 
     public final int edgePrimaryHeight;
     public final int edgeSecondaryHeight;
@@ -47,6 +48,7 @@ public class PaintsHelper {
         channelsMarginTop = attributes.getChannelsMarginTop();
         channelHeight = attributes.getChannelHeight();
         channelMargin = attributes.getChannelMargin();
+        timelineBackground = attributes.getTimelineBackgroundPaint();
     }
 
     public int getTotalHeight() {
@@ -61,7 +63,7 @@ public class PaintsHelper {
         return Math.max(getSecondaryTextHeight(), Math.max(secondarySerifHeight, edgeSecondaryHeight));
     }
 
-    private int getPrimaryTextHeight() {
+    public int getPrimaryTextHeight() {
         final Rect bounds = new Rect();
         primaryText.getTextBounds("1970", 0, 1, bounds);
         return bounds.height() + primaryTextMargin;

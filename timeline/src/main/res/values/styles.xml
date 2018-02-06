@@ -5,7 +5,7 @@
         <item name="baselineStroke">1dp</item>
         <item name="edgeSerifColor">@color/colorAccent</item>
         <item name="edgeSerifStroke">1dp</item>
-        <item name="primarySerifColor">@color/colorPrimaryDark</item>
+        <item name="primarySerifColor">@color/colorPrimary</item>
         <item name="primarySerifStroke">1dp</item>
         <item name="secondarySerifColor">@color/colorPrimary</item>
         <item name="secondarySerifStroke">1dp</item>
@@ -21,5 +21,6 @@
         <item name="channelsMarginTop">4dp</item>
         <item name="channelHeight">8dp</item>
         <item name="channelMargin">4dp</item>
+        <item name="backgroundTimeline">@android:color/transparent</item>
     </style>
 </resources>
