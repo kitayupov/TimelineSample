@@ -16,7 +16,8 @@ public class PaintsHelper {
     public final Paint trackPaint;
     public final Paint cursorPaint;
 
-    public final int edgeHeight;
+    public final int edgePrimaryHeight;
+    public final int edgeSecondaryHeight;
     public final int primarySerifHeight;
     public final int secondarySerifHeight;
 
@@ -35,13 +36,14 @@ public class PaintsHelper {
         secondarySerif = attributes.getSecondarySerifPaint();
         primaryText = attributes.getPrimaryTextPaint();
         secondaryText = attributes.getSecondaryTextPaint();
-        edgeHeight = attributes.getEdgeHeight();
-        primarySerifHeight = attributes.getPrimarySerifHeight();
-        secondarySerifHeight = attributes.getSecondarySerifHeight();
-        trackPaint = attributes.getTrackPaint();
-        cursorPaint = attributes.getCursorPaint();
         primaryTextMargin = attributes.getPrimaryTextMargin();
         secondaryTextMargin = attributes.getSecondaryTextMargin();
+        edgePrimaryHeight = attributes.getEdgePrimaryHeight(getPrimaryTextHeight());
+        edgeSecondaryHeight = attributes.getEdgeSecondaryHeight(getSecondaryTextHeight());
+        primarySerifHeight = attributes.getPrimarySerifHeight(getPrimaryTextHeight());
+        secondarySerifHeight = attributes.getSecondarySerifHeight(getSecondaryTextHeight());
+        trackPaint = attributes.getTrackPaint();
+        cursorPaint = attributes.getCursorPaint();
         channelsMarginTop = attributes.getChannelsMarginTop();
         channelHeight = attributes.getChannelHeight();
         channelMargin = attributes.getChannelMargin();
@@ -52,11 +54,11 @@ public class PaintsHelper {
     }
 
     private int getTopHeight() {
-        return Math.max(getPrimaryTextHeight(), Math.max(primarySerifHeight, edgeHeight));
+        return Math.max(getPrimaryTextHeight(), Math.max(primarySerifHeight, edgePrimaryHeight));
     }
 
     int getBottomHeight() {
-        return Math.max(getSecondaryTextHeight(), Math.max(secondarySerifHeight, edgeHeight));
+        return Math.max(getSecondaryTextHeight(), Math.max(secondarySerifHeight, edgeSecondaryHeight));
     }
 
     private int getPrimaryTextHeight() {

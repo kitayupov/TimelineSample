@@ -12,7 +12,6 @@ class AttributesHolder {
 
     private static final float DEFAULT_STROKE = 4.0F;
     private static final float DEFAULT_TEXT_SIZE = 18.0F;
-    private static final float DEFAULT_SERIF_HEIGHT = 20.0F;
     private static final float DEFAULT_TEXT_MARGIN = 8.0F;
 
     private static final float DEFAULT_CHANNELS_MARGIN_TOP = 15.0F;
@@ -86,16 +85,20 @@ class AttributesHolder {
         return paint;
     }
 
-    int getEdgeHeight() {
-        return getHeight(R.styleable.TimelineView_edgeHeight, DEFAULT_SERIF_HEIGHT);
+    int getEdgePrimaryHeight(int primaryTextHeight) {
+        return getHeight(R.styleable.TimelineView_edgePrimaryHeight, primaryTextHeight);
     }
 
-    int getPrimarySerifHeight() {
-        return getHeight(R.styleable.TimelineView_primarySerifHeight, DEFAULT_SERIF_HEIGHT);
+    int getEdgeSecondaryHeight(int secondaryTextHeight) {
+        return getHeight(R.styleable.TimelineView_edgeSecondaryHeight, secondaryTextHeight);
     }
 
-    int getSecondarySerifHeight() {
-        return getHeight(R.styleable.TimelineView_secondarySerifHeight, DEFAULT_SERIF_HEIGHT);
+    int getPrimarySerifHeight(int primaryTextHeight) {
+        return getHeight(R.styleable.TimelineView_primarySerifHeight, primaryTextHeight);
+    }
+
+    int getSecondarySerifHeight(int secondaryTextHeight) {
+        return getHeight(R.styleable.TimelineView_secondarySerifHeight, secondaryTextHeight);
     }
 
     Paint getTrackPaint() {

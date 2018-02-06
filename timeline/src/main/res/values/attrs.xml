@@ -13,7 +13,8 @@
         <attr name="primaryTextSize" format="dimension" />
         <attr name="secondaryTextColor" format="color" />
         <attr name="secondaryTextSize" format="dimension" />
-        <attr name="edgeHeight" format="dimension" />
+        <attr name="edgePrimaryHeight" format="dimension" />
+        <attr name="edgeSecondaryHeight" format="dimension" />
         <attr name="primarySerifHeight" format="dimension" />
         <attr name="secondarySerifHeight" format="dimension" />
         <attr name="trackColor" format="color" />
