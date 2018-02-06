@@ -13,10 +13,6 @@
         <item name="primaryTextSize">9sp</item>
         <item name="secondaryTextColor">@color/colorPrimary</item>
         <item name="secondaryTextSize">9sp</item>
-        <item name="edgePrimaryHeight">12dp</item>
-        <item name="edgeSecondaryHeight">12dp</item>
-        <item name="primarySerifHeight">10dp</item>
-        <item name="secondarySerifHeight">10dp</item>
         <item name="trackColor">@color/colorPrimary</item>
         <item name="cursorColor">@color/colorAccent</item>
         <item name="cursorWidth">1dp</item>
