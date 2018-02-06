@@ -3,6 +3,7 @@ package com.kbnt.qam.timeline;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineView extends View {
+
+    private static final int PRIMARY_TEXT_MARGIN = 8;
+    private static final int SECONDARY_TEXT_MARGIN = 8;
 
     private PaintsHelper paints;
     private ChannelsHelper channels;
@@ -68,7 +72,7 @@ public class TimelineView extends View {
             }
         }
         interval.setInterval(start, stop);
-        setMeasuredDimension(getWidth(), calculateHeight());
+        setMeasuredDimension(getWidth(), getTotalHeight());
         invalidate();
     }
 
@@ -76,12 +80,30 @@ public class TimelineView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int measuredHeight = calculateHeight();
+        final int measuredHeight = getTotalHeight();
         setMeasuredDimension(measuredWidth, measuredHeight);
     }
 
-    private int calculateHeight() {
-        return 50 + channels.getHeight() + getPaddingTop() + getPaddingBottom();
+    private int getTotalHeight() {
+        final int height = getTimelineBarHeight();
+        return height + channels.getHeight() + getPaddingTop() + getPaddingBottom();
+    }
+
+    private int getTimelineBarHeight() {
+        return Math.max(getPrimaryTextHeight(), Math.max(paints.primarySerifHeight, paints.edgeHeight))
+                + Math.max(getSecondaryTextHeight(), Math.max(paints.secondarySerifHeight, paints.edgeHeight));
+    }
+
+    private int getPrimaryTextHeight() {
+        final Rect bounds = new Rect();
+        paints.primaryText.getTextBounds("1970", 0, 1, bounds);
+        return bounds.height() + PRIMARY_TEXT_MARGIN;
+    }
+
+    private int getSecondaryTextHeight() {
+        final Rect bounds = new Rect();
+        paints.secondaryText.getTextBounds("1970", 0, 1, bounds);
+        return bounds.height() + SECONDARY_TEXT_MARGIN;
     }
 
     @Override
@@ -142,11 +164,11 @@ public class TimelineView extends View {
         final DateTime stop = interval.getStart().plus(getDate(getTotalWidth()));
         final List<DateSegment> segments = getSegments(new DateSegment(start, stop), mainPeriod);
         for (DateSegment segment : segments) {
-            drawMainSerifLine(canvas, segment);
-            drawMainSerifText(canvas, secondaryPeriod, segment);
+            drawPrimarySerifLine(canvas, segment);
+            drawPrimarySerifText(canvas, secondaryPeriod, segment);
             drawSecondarySerifs(canvas, secondaryPeriod, segment);
         }
-        drawMainEdges(canvas);
+        drawEdges(canvas);
     }
 
     private List<DateSegment> getSegments(DateSegment segment, TimeInterval.TimePeriod period) {
@@ -160,7 +182,7 @@ public class TimelineView extends View {
         return segments;
     }
 
-    private void drawMainEdges(Canvas canvas) {
+    private void drawEdges(Canvas canvas) {
         final DateTime start = interval.getStart();
         final float left = getPoint(start);
         if (left >= 0) {
@@ -173,7 +195,7 @@ public class TimelineView extends View {
         }
     }
 
-    private void drawMainSerifLine(Canvas canvas, DateSegment segment) {
+    private void drawPrimarySerifLine(Canvas canvas, DateSegment segment) {
         final DateTime start = segment.start;
         final float left = getPoint(start);
         if (left >= 0 && left <= getTotalWidth()) {
@@ -181,7 +203,7 @@ public class TimelineView extends View {
         }
     }
 
-    private void drawMainSerifText(Canvas canvas, TimeInterval.TimePeriod secondaryPeriod, DateSegment mainSegment) {
+    private void drawPrimarySerifText(Canvas canvas, TimeInterval.TimePeriod secondaryPeriod, DateSegment mainSegment) {
         final DateTime start = mainSegment.start;
         final DateTime stop = mainSegment.stop;
         final String text = DateTimeUtils.getUpString(start, secondaryPeriod);
@@ -190,7 +212,7 @@ public class TimelineView extends View {
         final float middle = (left + right) / 2;
         if (middle >= (paints.primaryText.measureText(text) + 10) / 2 &&
                 middle <= getTotalWidth() - (paints.primaryText.measureText(text) + 10) / 2) {
-            canvas.drawText(text, middle, -10, paints.primaryText);
+            canvas.drawText(text, middle, -PRIMARY_TEXT_MARGIN, paints.primaryText);
         }
     }
 
@@ -220,7 +242,7 @@ public class TimelineView extends View {
         final String text = DateTimeUtils.getDownString(start, secondaryPeriod);
         if (right >= (paints.secondaryText.measureText(text) + 15) &&
                 left <= getTotalWidth() - (paints.secondaryText.measureText(text) + 10)) {
-            canvas.drawText(text, left + 10, 20, paints.secondaryText);
+            canvas.drawText(text, left + 10, getSecondaryTextHeight(), paints.secondaryText);
         }
     }
 
