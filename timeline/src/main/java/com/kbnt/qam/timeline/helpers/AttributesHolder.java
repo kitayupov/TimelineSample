@@ -21,7 +21,7 @@ class AttributesHolder {
     private final TypedArray array;
 
     AttributesHolder(Context context, AttributeSet attrs) {
-        array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TimelineView, 0, 0);
+        array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TimelineView, 0, R.style.TimelineWidget);
     }
 
     private int getColor(int colorAttribute, int defaultColor) {

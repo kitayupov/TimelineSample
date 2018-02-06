@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TimelineWidget">
+        <item name="baselineColor">@color/colorAccent</item>
+        <item name="baselineStroke">2dp</item>
+        <item name="edgeSerifColor">@color/colorAccent</item>
+        <item name="edgeSerifStroke">2dp</item>
+        <item name="primarySerifColor">@color/colorPrimaryDark</item>
+        <item name="primarySerifStroke">2dp</item>
+        <item name="secondarySerifColor">@color/colorPrimary</item>
+        <item name="secondarySerifStroke">2dp</item>
+        <item name="primaryTextColor">@color/colorAccent</item>
+        <item name="primaryTextSize">9sp</item>
+        <item name="secondaryTextColor">@color/colorPrimary</item>
+        <item name="secondaryTextSize">9sp</item>
+        <item name="edgePrimaryHeight">12dp</item>
+        <item name="edgeSecondaryHeight">12dp</item>
+        <item name="primarySerifHeight">10dp</item>
+        <item name="secondarySerifHeight">10dp</item>
+        <item name="trackColor">@color/colorPrimary</item>
+        <item name="cursorColor">@color/colorAccent</item>
+        <item name="cursorWidth">1dp</item>
+        <item name="primaryTextMargin">4dp</item>
+        <item name="secondaryTextMargin">4dp</item>
+        <item name="channelsMarginTop">8dp</item>
+        <item name="channelHeight">10dp</item>
+        <item name="channelMargin">6dp</item>
+    </style>
+</resources>
