@@ -18,8 +18,8 @@
         <item name="cursorWidth">1dp</item>
         <item name="primaryTextMargin">4dp</item>
         <item name="secondaryTextMargin">4dp</item>
-        <item name="channelsMarginTop">8dp</item>
-        <item name="channelHeight">10dp</item>
-        <item name="channelMargin">6dp</item>
+        <item name="channelsMarginTop">4dp</item>
+        <item name="channelHeight">8dp</item>
+        <item name="channelMargin">4dp</item>
     </style>
 </resources>
