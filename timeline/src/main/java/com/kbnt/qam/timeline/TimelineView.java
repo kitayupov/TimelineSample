@@ -97,10 +97,10 @@ public class TimelineView extends View {
         canvas.restore();
     }
 
-    private int getRelativeTop() {
-        final int height = getHeight();
+    public int getRelativeTop() {
+        final int totalHeight = getHeight();
         final int channelsHeight = channels.getHeight();
-        return (height - channelsHeight) / 2;
+        return (totalHeight - channelsHeight) / 2;
     }
 
     private void drawTimelineBar(Canvas canvas) {

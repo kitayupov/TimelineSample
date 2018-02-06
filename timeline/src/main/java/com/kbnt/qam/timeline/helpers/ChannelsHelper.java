@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class ChannelsHelper {
 
+    private final int timelineBottomHeight;
     private final int channelsMarginTop;
     private final int channelHeight;
     private final int channelMargin;
@@ -13,7 +14,8 @@ public class ChannelsHelper {
     private ArrayList<Channel> channels;
 
     public ChannelsHelper(PaintsHelper paints) {
-        channelsMarginTop = paints.getBottomHeight() + paints.channelsMarginTop;
+        timelineBottomHeight = paints.getBottomHeight();
+        channelsMarginTop = paints.channelsMarginTop;
         channelHeight = paints.channelHeight;
         channelMargin = paints.channelMargin;
         channels = new ArrayList<>();
@@ -24,7 +26,8 @@ public class ChannelsHelper {
     }
 
     public int getHeight() {
-        return channelsMarginTop + channelHeight * channels.size() + channelMargin * (channels.size() - 1);
+        final int count = channels.size();
+        return count == 0 ? 0 : channelsMarginTop + channelHeight * count + channelMargin * (count - 1);
     }
 
     public int size() {
@@ -32,7 +35,7 @@ public class ChannelsHelper {
     }
 
     public int getChannelTop(int index) {
-        return channelsMarginTop + (channelMargin + channelHeight) * index;
+        return channelsMarginTop + timelineBottomHeight + (channelMargin + channelHeight) * index;
     }
 
     public int getChannelBottom(int index) {

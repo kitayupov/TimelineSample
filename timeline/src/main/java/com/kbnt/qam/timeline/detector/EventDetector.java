@@ -69,7 +69,7 @@ public class EventDetector {
     }
 
     private void performClick(float x, float y) {
-        final Channel channel = getChannel(y - getRelativeTop());
+        final Channel channel = getChannel(y - view.getRelativeTop());
         if (channel != null) {
             final long datePoint = view.getDate(x - view.getPaddingStart());
             clickedDate = interval.getStart().plus(datePoint);
@@ -87,11 +87,6 @@ public class EventDetector {
         }
         clickedDate = null;
         clickedTrack = null;
-    }
-
-    private int getRelativeTop() {
-        final int height = channels.getHeight();
-        return (view.getHeight() - height) / 2;
     }
 
     private Channel getChannel(float y) {
