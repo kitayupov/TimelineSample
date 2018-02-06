@@ -14,9 +14,9 @@ class AttributesHolder {
     private static final float DEFAULT_TEXT_SIZE = 18.0F;
     private static final float DEFAULT_TEXT_MARGIN = 8.0F;
 
-    private static final float DEFAULT_CHANNELS_MARGIN_TOP = 15.0F;
-    private static final float DEFAULT_CHANNEL_HEIGHT = 20.0F;
-    private static final float DEFAULT_CHANNEL_MARGIN = 10.0F;
+    private static final float DEFAULT_CHANNELS_MARGIN_TOP = 8.0F;
+    private static final float DEFAULT_CHANNEL_HEIGHT = 16.0F;
+    private static final float DEFAULT_CHANNEL_MARGIN = 8.0F;
 
     private final TypedArray array;
 
